@@ -4,6 +4,8 @@ import { SceneData, SceneTemplate } from "../../types/schema";
 import { HeroScene } from "./scenes/HeroScene";
 import { ComparisonScene } from "./scenes/ComparisonScene";
 import { StatisticScene } from "./scenes/StatisticScene";
+import { TimelineScene } from "./scenes/TimelineScene";
+import { CauseEffectScene } from "./scenes/CauseEffectScene";
 
 // 1. The Registry Dictionary: Maps schema strings to React components
 const SCENE_REGISTRY: Record<
@@ -13,6 +15,8 @@ const SCENE_REGISTRY: Record<
   Hero: HeroScene,
   Comparison: ComparisonScene,
   Statistic: StatisticScene,
+  Timeline: TimelineScene,
+  CauseEffect: CauseEffectScene,
 };
 
 interface Props {
