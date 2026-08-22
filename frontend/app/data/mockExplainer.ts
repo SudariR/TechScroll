@@ -32,6 +32,19 @@ export const MOCK_NVIDIA_EXPLAINER: ExplainerClip = {
       emphasis: 'right',
       duration: 6,
 },
+
+      {
+      id: 'scene-timeline',
+      template: 'Timeline',
+      icon: 'rocket',
+      topic: 'How NVIDIA Got Here',
+      steps: [
+        { label: '1999', text: 'Invents the GPU for video games.' },
+        { label: '2012', text: 'Researchers discover GPUs train neural networks far faster than CPUs.' },
+        { label: '2023', text: 'The generative AI boom makes NVIDIA chips the bottleneck of the entire industry.' },
+      ],
+      duration: 7,
+      },
     {
       id: 'scene-3',
       template: 'Statistic',
@@ -40,6 +53,17 @@ export const MOCK_NVIDIA_EXPLAINER: ExplainerClip = {
       context: 'Year-over-year revenue growth driven by AI data center GPUs.',
       trend: 'up', // 👈 Shows the glowing green upwards trend arrow!
       duration: 5,
+    },
+        {
+      id: 'scene-why',
+      template: 'CauseEffect',
+      icon: 'brain',
+      topic: 'Why It Matters To You',
+      causeLabel: 'What happened',
+      cause: 'Every major AI model is trained on NVIDIA hardware, giving one company control of the supply.',
+      effectLabel: 'What it means',
+      effect: 'The pace of AI progress — and its cost — now depends on a single chipmaker.',
+      duration: 7,
     },
   ],
 };
