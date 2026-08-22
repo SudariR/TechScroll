@@ -23,7 +23,7 @@ News Sources → Content Collector → AI Processing → Structured JSON
 - [x] Registry-based scene dispatcher
 - [x] Hero / Comparison / Statistic templates
 - [x] Auto-advancing clip player with progress bar
-- [ ] Timeline & Cause→Effect templates
+- [x] Timeline & Cause→Effect templates
 - [ ] Vertical swipe feed
 - [ ] NestJS + Gemini content pipeline
 - [ ] Admin dashboard, auth, bookmarks
