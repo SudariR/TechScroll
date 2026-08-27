@@ -27,7 +27,9 @@ News Sources → Content Collector → AI Processing → Structured JSON
 - [x] Vertical snap-scrolling swipe feed
 - [x] IntersectionObserver-driven active clip detection
 - [x] Keyboard navigation (scenes + clips)
-- [ ] Feed windowing for large clip lists
+- [x] Windowed feed rendering — a constant 3 players stay mounted
+      regardless of feed length, keeping memory and listener count
+      flat as the feed scales
 - [ ] NestJS + Gemini content pipeline
 - [ ] Admin dashboard, auth, bookmarks
 
