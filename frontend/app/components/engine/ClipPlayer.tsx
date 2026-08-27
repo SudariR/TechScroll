@@ -82,7 +82,6 @@ export const ClipPlayer: React.FC<Props> = ({
 
   const atStart = index === 0;
   const atEnd = index === total - 1;
-
   return (
     <div className="w-full max-w-md flex flex-col gap-4">
       <div className="flex flex-col gap-2">
