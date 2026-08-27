@@ -13,13 +13,19 @@ import {
 } from "lucide-react";
 
 const DEFAULT_DURATION = 5;
+const END_HOLD = 2; // extra seconds on the last scene so the takeaway is readable
 
 interface Props {
   clip: ExplainerClip;
-  isActive?: boolean; // is this clip the one on screen?
+  isActive?: boolean;
+  onComplete?: () => void;
 }
 
-export const ClipPlayer: React.FC<Props> = ({ clip, isActive = true }) => {
+export const ClipPlayer: React.FC<Props> = ({
+  clip,
+  isActive = true,
+  onComplete,
+}) => {
   const [index, setIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
 
@@ -33,7 +39,7 @@ export const ClipPlayer: React.FC<Props> = ({ clip, isActive = true }) => {
   );
   const prev = useCallback(() => setIndex((i) => Math.max(i - 1, 0)), []);
 
-  // Reset when the clip scrolls out of view (feed-ready behaviour)
+  /* reset when scrolled out of view */
   useEffect(() => {
     if (!isActive) {
       setIndex(0);
@@ -41,16 +47,25 @@ export const ClipPlayer: React.FC<Props> = ({ clip, isActive = true }) => {
     }
   }, [isActive]);
 
-  // Auto-advance
+  /* auto-advance scenes, then hand off to the parent */
   useEffect(() => {
     if (!isActive || !isPlaying) return;
-    if (index >= total - 1) return; // stop at the last scene
 
-    const timer = setTimeout(next, duration * 1000);
-    return () => clearTimeout(timer); // cleanup prevents ghost timers
-  }, [index, isPlaying, isActive, duration, total, next]);
+    const isLast = index >= total - 1;
+    const wait = (isLast ? duration + END_HOLD : duration) * 1000;
 
-  // Keyboard navigation
+    const timer = setTimeout(() => {
+      if (isLast) {
+        onComplete?.();
+      } else {
+        next();
+      }
+    }, wait);
+
+    return () => clearTimeout(timer);
+  }, [index, isPlaying, isActive, duration, total, next, onComplete]);
+
+  /* left / right arrows move between scenes */
   useEffect(() => {
     if (!isActive) return;
     const onKey = (e: KeyboardEvent) => {
@@ -70,7 +85,6 @@ export const ClipPlayer: React.FC<Props> = ({ clip, isActive = true }) => {
 
   return (
     <div className="w-full max-w-md flex flex-col gap-4">
-      {/* header */}
       <div className="flex flex-col gap-2">
         <SceneProgress
           total={total}
@@ -78,7 +92,7 @@ export const ClipPlayer: React.FC<Props> = ({ clip, isActive = true }) => {
           duration={duration}
           isPlaying={isPlaying && isActive}
         />
-        <div className="flex items-center justify-between text-[11px] text-slate-400">
+        <div className="flex items-center justify-between text-[11px] text-fg-dim">
           <span className="font-semibold uppercase tracking-wider truncate pr-3">
             {clip.title}
           </span>
@@ -88,26 +102,23 @@ export const ClipPlayer: React.FC<Props> = ({ clip, isActive = true }) => {
         </div>
       </div>
 
-      {/* stage */}
-      <div className="relative w-full h-[420px] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
-        {/* key={scene.id} forces a remount so entry animations replay */}
+      <div className="relative w-full h-[420px] rounded-2xl overflow-hidden border border-ink-800 shadow-2xl">
         <SceneRenderer key={scene.id} scene={scene} isActive={isActive} />
       </div>
 
-      {/* controls */}
       <div className="flex items-center gap-3">
         <button
           onClick={prev}
           disabled={atStart}
           aria-label="Previous scene"
-          className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none transition"
+          className="p-3 rounded-xl bg-ink-900 border border-ink-800 text-fg-muted hover:bg-ink-800 disabled:opacity-30 disabled:pointer-events-none transition"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
 
         <button
           onClick={() => setIsPlaying((p) => !p)}
-          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-sm font-medium hover:bg-slate-800 transition"
+          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-ink-900 border border-ink-800 text-fg text-sm font-medium hover:bg-ink-800 transition"
         >
           {isPlaying ? (
             <Pause className="w-4 h-4" />
@@ -121,23 +132,20 @@ export const ClipPlayer: React.FC<Props> = ({ clip, isActive = true }) => {
           onClick={next}
           disabled={atEnd}
           aria-label="Next scene"
-          className="p-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white disabled:opacity-30 disabled:pointer-events-none transition shadow-lg shadow-blue-600/20"
+          className="p-3 rounded-xl bg-accent hover:bg-accent-bright text-ink-950 font-semibold disabled:opacity-30 disabled:pointer-events-none transition"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
 
-      {/* takeaway reveals only at the end — it's the payoff */}
       {atEnd && (
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-950/30 border border-blue-500/20">
-          <Lightbulb className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-accent-soft border border-accent-border">
+          <Lightbulb className="w-4 h-4 text-accent mt-0.5 shrink-0" />
           <div>
-            <p className="text-[10px] text-blue-400 uppercase tracking-widest font-bold mb-1">
+            <p className="text-[10px] text-accent uppercase tracking-widest font-bold mb-1">
               Why It Matters
             </p>
-            <p className="text-sm text-slate-200 leading-relaxed">
-              {clip.takeaway}
-            </p>
+            <p className="text-sm text-fg leading-relaxed">{clip.takeaway}</p>
           </div>
         </div>
       )}
