@@ -38,14 +38,14 @@ const CompareCard: React.FC<CardProps> = ({
       className={`relative flex flex-col items-center text-center gap-3 p-5 rounded-2xl border transition-colors
         ${
           highlighted
-            ? "bg-blue-950/40 border-blue-500/50 shadow-[0_0_35px_-10px_rgba(59,130,246,0.6)]"
-            : "bg-slate-900/70 border-slate-800"
+            ? "bg-accent-soft border-accent-border shadow-[0_0_35px_-10px_rgba(0,168,0,0.28)]"
+            : "bg-ink-900/70 border-ink-800"
         }`}
     >
       {logo && (
         <div
           className={`w-11 h-11 rounded-xl grid place-items-center border
-          ${highlighted ? "bg-slate-950 border-blue-500/30" : "bg-slate-950 border-slate-800"}`}
+          ${highlighted ? "bg-ink-950 border-accent-border" : "bg-ink-950 border-ink-800"}`}
         >
           <img
             src={logo}
@@ -60,14 +60,14 @@ const CompareCard: React.FC<CardProps> = ({
 
       <span
         className={`text-[10px] font-bold uppercase tracking-widest
-        ${highlighted ? "text-blue-400" : "text-slate-500"}`}
+        ${highlighted ? "text-accent" : "text-fg-dim"}`}
       >
         {label}
       </span>
 
       <p
         className={`text-lg md:text-2xl font-bold leading-tight
-        ${highlighted ? "text-white" : "text-slate-300"}`}
+        ${highlighted ? "text-fg" : "text-fg-muted"}`}
       >
         {value}
       </p>
@@ -80,18 +80,18 @@ export const ComparisonScene: React.FC<Props> = ({ data, isActive }) => {
   const Icon = getIcon(data.icon);
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center p-6 bg-slate-950 text-white rounded-2xl overflow-hidden">
+    <div className="relative w-full h-full flex flex-col items-center justify-center p-6 bg-ink-950 text-fg rounded-2xl overflow-hidden">
       {/* ambient depth */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-700/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-accent-soft rounded-full blur-3xl pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="z-10 inline-flex items-center gap-2 mb-7 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800"
+        className="z-10 inline-flex items-center gap-2 mb-7 px-3 py-1 rounded-full bg-ink-900/80 border border-ink-800"
       >
-        <Icon className="w-3.5 h-3.5 text-blue-400" />
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-300">
+        <Icon className="w-3.5 h-3.5 text-accent" />
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-fg-muted">
           {data.topic}
         </span>
       </motion.div>
@@ -130,9 +130,9 @@ export const ComparisonScene: React.FC<Props> = ({ data, isActive }) => {
           }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
                      w-10 h-10 rounded-full grid place-items-center
-                     bg-slate-950 border border-slate-700 shadow-xl"
+                     bg-ink-950 border border-ink-700 shadow-xl"
         >
-          <span className="text-[10px] font-black tracking-wider text-slate-400">
+          <span className="text-[10px] font-black tracking-wider text-fg-dim">
             VS
           </span>
         </motion.div>

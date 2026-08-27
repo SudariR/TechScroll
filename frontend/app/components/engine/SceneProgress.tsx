@@ -23,10 +23,10 @@ export const SceneProgress: React.FC<Props> = ({
         return (
           <div
             key={i}
-            className="flex-1 h-[3px] rounded-full bg-slate-700/60 overflow-hidden"
+            className="flex-1 h-[3px] rounded-full bg-ink-700/60 overflow-hidden"
           >
             <motion.div
-              className="h-full bg-blue-400 rounded-full origin-left"
+              className="h-full bg-accent rounded-full origin-left"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: isDone ? 1 : isCurrent && isPlaying ? 1 : 0 }}
               transition={
