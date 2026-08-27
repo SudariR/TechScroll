@@ -1,0 +1,40 @@
+{
+  "promptVersion": "v1",
+  "generatedAt": "2026-08-27T13:49:55.493Z",
+  "records": [
+    {
+      "slug": "chip-export-controls",
+      "run": 1,
+      "ok": true,
+      "attempts": 1,
+      "latencyMs": 2475,
+      "categoryMatch": true,
+      "validationIssues": [],
+      "qualityWarnings": [
+        {
+          "code": "DURATION_MISMATCH",
+          "detail": "scene 4: 7s for 28 words (expected ~11s)"
+        }
+      ]
+    },
+    {
+      "slug": "npm-supply-chain",
+      "run": 1,
+      "ok": true,
+      "attempts": 1,
+      "latencyMs": 2427,
+      "categoryMatch": true,
+      "validationIssues": [],
+      "qualityWarnings": [
+        {
+          "code": "DURATION_MISMATCH",
+          "detail": "scene 2: 8s for 35 words (expected ~14s)"
+        },
+        {
+          "code": "DURATION_MISMATCH",
+          "detail": "scene 4: 7s for 36 words (expected ~14s)"
+        }
+      ]
+    }
+  ]
+}
