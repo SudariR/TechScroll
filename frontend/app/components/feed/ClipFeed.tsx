@@ -5,6 +5,10 @@ import { ExplainerClip } from "../../types/schema";
 import { ClipPlayer } from "../engine/ClipPlayer";
 import { ScrollHint } from "./ScrollHint";
 import { useActiveClip } from "../../hooks/UseActiveClip";
+import { ClipSkeleton } from "./ClipSkeleton";
+
+/** How many clips to keep mounted on each side of the active one. */
+const WINDOW_RADIUS = 1;
 
 interface Props {
   clips: ExplainerClip[];
@@ -24,23 +28,30 @@ export const ClipFeed: React.FC<Props> = ({ clips }) => {
                    [scrollbar-width:none] [-ms-overflow-style:none]
                    [&::-webkit-scrollbar]:hidden"
       >
-        {clips.map((clip, i) => (
-          <section
-            key={clip.id}
-            data-clip-index={i}
-            className="h-screen w-full snap-start snap-always
-                       flex items-center justify-center p-4"
-          >
-            <ClipPlayer
-              clip={clip}
-              isActive={i === activeIndex}
-              onComplete={() => scrollToClip(i + 1)}
-            />
-          </section>
-        ))}
+        {clips.map((clip, i) => {
+          const isMounted = Math.abs(i - activeIndex) <= WINDOW_RADIUS;
+
+          return (
+            <section
+              key={clip.id}
+              data-clip-index={i}
+              className="h-screen w-full snap-start snap-always
+                         flex items-center justify-center p-4"
+            >
+              {isMounted ? (
+                <ClipPlayer
+                  clip={clip}
+                  isActive={i === activeIndex}
+                  onComplete={() => scrollToClip(i + 1)}
+                />
+              ) : (
+                <ClipSkeleton title={clip.title} />
+              )}
+            </section>
+          );
+        })}
       </div>
 
-      {/* position rail */}
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
         {clips.map((clip, i) => (
           <button
