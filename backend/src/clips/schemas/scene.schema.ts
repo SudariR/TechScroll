@@ -45,7 +45,7 @@ export const comparisonSceneSchema = z.object({
   rightValue: z.string().min(2).max(48),
   leftDomain: domainSchema,
   rightDomain: domainSchema,
-  emphasis: z.enum(['left', 'right', 'none']).optional(),
+  emphasis: z.enum(['left', 'right', 'none']).catch('right').optional(),
 });
 
 export const statisticSceneSchema = z.object({
@@ -58,7 +58,7 @@ export const statisticSceneSchema = z.object({
 });
 
 export const timelineStepSchema = z.object({
-  label: z.string().min(1).max(16),
+  label: z.string().min(1).max(28),
   text: z.string().min(10).max(100),
 });
 

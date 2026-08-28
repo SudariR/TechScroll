@@ -1,4 +1,4 @@
-import type { Explainer } from '../../clips/schemas/explainer.schema';
+import type { Explainer } from '../clips/schemas/explainer.schema';
 
 export interface QualityWarning {
   code: string;

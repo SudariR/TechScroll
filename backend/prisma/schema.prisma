@@ -43,6 +43,10 @@ model Clip {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  autoPublished Boolean @default(false)
+  qualityScore  Int?
+  reviewNotes   Json?
+
   @@index([published, publishedAt])
   @@index([category])
 }
