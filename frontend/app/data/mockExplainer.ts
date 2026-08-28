@@ -8,6 +8,7 @@ export const MOCK_NVIDIA_EXPLAINER: ExplainerClip = {
   title: 'Why NVIDIA Just Made History',
   hook: 'NVIDIA just overtook Microsoft to become the most valuable company on Earth.',
   takeaway: 'AI infrastructure is now reshaping global market dominance.',
+  category: 'AI Hardware',
   scenes: [
     {
       id: 'c1-s1',
@@ -86,6 +87,7 @@ export const MOCK_SECURITY_EXPLAINER: ExplainerClip = {
   hook: 'A single compromised npm package can reach millions of apps overnight.',
   takeaway:
     'Modern software is assembled, not written — so trust is the real attack surface.',
+  category: 'Cybersecurity',
   scenes: [
     {
       id: 'c2-s1',
@@ -145,6 +147,7 @@ export const MOCK_OPENSOURCE_EXPLAINER: ExplainerClip = {
   hook: 'A licence change can turn the tool your company runs on into a bill.',
   takeaway:
     'Open source is a legal agreement first and a community second — read the licence.',
+  category: 'Open Source',
   scenes: [
     {
       id: 'c3-s1',
