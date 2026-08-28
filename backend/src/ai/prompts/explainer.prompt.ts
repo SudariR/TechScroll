@@ -131,6 +131,7 @@ VALIDATION ERRORS:
 ${issues.map((i) => `- ${i.path}: ${i.message}`).join('\n')}
 
 Fix ONLY these problems. Keep everything else identical.
+Return a single JSON object. Do not wrap it in an array.
 Return the corrected JSON.
 `.trim();
 }
