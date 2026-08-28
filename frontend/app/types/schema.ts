@@ -65,5 +65,7 @@ export interface ExplainerClip {
   hook: string;
   takeaway: string;
   category?: string;
+  publishedAt?: string;
+  autoPublished?: boolean;
   scenes: SceneData[];
 }

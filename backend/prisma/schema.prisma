@@ -37,6 +37,8 @@ model Clip {
   published   Boolean  @default(false)
   publishedAt DateTime?
 
+  featured Boolean @default(false)
+
   model         String?  // which Gemini model generated this
   promptVersion String?  // which prompt version
 
@@ -47,7 +49,7 @@ model Clip {
   qualityScore  Int?
   reviewNotes   Json?
 
-  @@index([published, publishedAt])
+  @@index([published, featured, publishedAt])
   @@index([category])
 }
 

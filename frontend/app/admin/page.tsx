@@ -8,9 +8,10 @@ import {
   generateClip,
   listAllClips,
   publishClip,
+  toggleFeatured,
   deleteClip,
 } from "../lib/adminApi";
-import { Loader2, Sparkles, Check, Trash2, RefreshCw } from "lucide-react";
+import { Loader2, Sparkles, Check, Trash2, RefreshCw, Star } from "lucide-react";
 
 const KEY_STORAGE = "techscroll_admin_key";
 
@@ -92,6 +93,16 @@ export default function AdminPage() {
     await publishClip(adminKey, id);
     await refresh(adminKey);
     if (preview?.id === id) setPreview({ ...preview, published: true });
+  };
+
+  const handleToggleFeature = async (id: string) => {
+    try {
+      const updated = await toggleFeatured(adminKey, id);
+      await refresh(adminKey);
+      if (preview?.id === id) setPreview({ ...preview, featured: updated.featured });
+    } catch (e) {
+      setError((e as Error).message);
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -264,6 +275,22 @@ export default function AdminPage() {
                     </p>
                   </button>
 
+                  <button
+                    onClick={() => handleToggleFeature(c.id)}
+                    className={`p-2 rounded-md transition ${
+                      c.featured
+                        ? "bg-accent/10 text-accent hover:bg-accent/20"
+                        : "bg-ink-900 text-fg-dim hover:text-accent"
+                    }`}
+                    aria-label={c.featured ? "Unfeature" : "Feature"}
+                  >
+                    <Star
+                      className={`w-3.5 h-3.5 ${
+                        c.featured ? "fill-accent text-accent" : ""
+                      }`}
+                    />
+                  </button>
+
                   {!c.published && (
                     <button
                       onClick={() => handlePublish(c.id)}
@@ -330,16 +357,30 @@ export default function AdminPage() {
                 {preview.model && <> · {preview.model}</>}
                 {preview.promptVersion && <> · {preview.promptVersion}</>}
               </div>
-              {!preview.published ? (
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={() => handlePublish(preview.id)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-ink-950 font-semibold hover:bg-accent-bright transition"
+                  onClick={() => handleToggleFeature(preview.id)}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition cursor-pointer ${
+                    preview.featured
+                      ? "border-accent/40 bg-accent/10 text-accent hover:bg-accent/20"
+                      : "border-ink-800 bg-ink-950 text-fg-dim hover:text-fg hover:border-ink-700"
+                  }`}
+                  aria-label={preview.featured ? "Unfeature clip" : "Feature clip"}
                 >
-                  <Check className="w-3.5 h-3.5" /> Publish to feed
+                  <Star className={`w-3.5 h-3.5 ${preview.featured ? "fill-accent text-accent" : ""}`} />
+                  {preview.featured ? "Featured" : "Feature"}
                 </button>
-              ) : (
-                <span className="text-accent font-semibold">Published</span>
-              )}
+                {!preview.published ? (
+                  <button
+                    onClick={() => handlePublish(preview.id)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-ink-950 font-semibold hover:bg-accent-bright transition cursor-pointer"
+                  >
+                    <Check className="w-3.5 h-3.5" /> Publish to feed
+                  </button>
+                ) : (
+                  <span className="text-accent font-semibold px-2 py-1">Published</span>
+                )}
+              </div>
             </div>
           )}
         </section>

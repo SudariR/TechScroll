@@ -36,12 +36,55 @@ export class ClipsService {
     });
   }
 
-  findPublished() {
-    return this.prisma.clip.findMany({
-      where: { published: true },
-      orderBy: { publishedAt: 'desc' },
-      take: 20,
+  async findPublished(range: 'today' | 'week' | 'all' = 'today') {
+    const since = new Date();
+    if (range === 'today') since.setHours(0, 0, 0, 0);
+    else if (range === 'week') since.setDate(since.getDate() - 7);
+
+    const where =
+      range === 'all'
+        ? { published: true }
+        : { published: true, publishedAt: { gte: since } };
+
+    const clips = await this.prisma.clip.findMany({
+      where,
+      orderBy: [{ featured: 'desc' }, { publishedAt: 'desc' }],
+      take: 30,
+      select: {
+        id: true, title: true, hook: true, takeaway: true,
+        category: true, scenes: true, publishedAt: true,
+        autoPublished: true,
+      },
     });
+
+    // Never return a near-empty feed — widen to all-time as a fallback.
+    if (clips.length < 3 && range !== 'all') {
+      return this.prisma.clip.findMany({
+        where: { published: true },
+        orderBy: [{ featured: 'desc' }, { publishedAt: 'desc' }],
+        take: 30,
+        select: {
+          id: true, title: true, hook: true, takeaway: true,
+          category: true, scenes: true, publishedAt: true,
+          autoPublished: true,
+        },
+      });
+    }
+
+    return clips;
+  }
+
+  async countsByRange() {
+    const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+
+    const [today, week, all] = await Promise.all([
+      this.prisma.clip.count({ where: { published: true, publishedAt: { gte: startOfDay } } }),
+      this.prisma.clip.count({ where: { published: true, publishedAt: { gte: weekAgo } } }),
+      this.prisma.clip.count({ where: { published: true } }),
+    ]);
+
+    return { today, week, all };
   }
 
   findAll() {
@@ -52,6 +95,14 @@ export class ClipsService {
     return this.prisma.clip.update({
       where: { id },
       data: { published: true, publishedAt: new Date() },
+    });
+  }
+
+  async toggleFeature(id: string) {
+    const clip = await this.prisma.clip.findUniqueOrThrow({ where: { id } });
+    return this.prisma.clip.update({
+      where: { id },
+      data: { featured: !clip.featured },
     });
   }
 
