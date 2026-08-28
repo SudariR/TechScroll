@@ -153,4 +153,15 @@ export class IngestService {
         await this.fetchArticles(2);
         await this.processPending(2);
     }
+
+    /** Prune unreviewed drafts older than 14 days. */
+    @Cron(CronExpression.EVERY_WEEK)
+    async pruneStaleDrafts() {
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - 14);
+        const { count } = await this.prisma.clip.deleteMany({
+            where: { published: false, featured: false, createdAt: { lt: cutoff } },
+        });
+        this.logger.log(`Pruned ${count} stale drafts`);
+    }
 }
