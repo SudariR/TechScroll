@@ -1612,12 +1612,19 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$engine$2f$ClipPlayer$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/app/components/engine/ClipPlayer.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$feed$2f$ScrollHint$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/app/components/feed/ScrollHint.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$hooks$2f$UseActiveClip$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/app/hooks/UseActiveClip.ts [app-client] (ecmascript)");
+(()=>{
+    const e = new Error("Cannot find module './ClipSkeleton'");
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+})();
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
 ;
 ;
 ;
+;
+/** How many clips to keep mounted on each side of the active one. */ const WINDOW_RADIUS = 1;
 const ClipFeed = ({ clips })=>{
     _s();
     const { containerRef, activeIndex, scrollToClip } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$hooks$2f$UseActiveClip$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useActiveClip"])(clips.length);
@@ -1626,26 +1633,35 @@ const ClipFeed = ({ clips })=>{
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 ref: containerRef,
                 className: "h-screen w-full overflow-y-scroll snap-y snap-mandatory   scroll-smooth bg-ink-950   [scrollbar-width:none] [-ms-overflow-style:none]   [&::-webkit-scrollbar]:hidden",
-                children: clips.map((clip, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                children: clips.map((clip, i)=>{
+                    const isMounted = Math.abs(i - activeIndex) <= WINDOW_RADIUS;
+                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                         "data-clip-index": i,
                         className: "h-screen w-full snap-start snap-always   flex items-center justify-center p-4",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$engine$2f$ClipPlayer$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ClipPlayer"], {
+                        children: isMounted ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$engine$2f$ClipPlayer$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ClipPlayer"], {
                             clip: clip,
                             isActive: i === activeIndex,
                             onComplete: ()=>scrollToClip(i + 1)
                         }, void 0, false, {
                             fileName: "[project]/app/components/feed/ClipFeed.tsx",
-                            lineNumber: 34,
-                            columnNumber: 13
+                            lineNumber: 42,
+                            columnNumber: 17
+                        }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ClipSkeleton, {
+                            title: clip.title
+                        }, void 0, false, {
+                            fileName: "[project]/app/components/feed/ClipFeed.tsx",
+                            lineNumber: 48,
+                            columnNumber: 17
                         }, ("TURBOPACK compile-time value", void 0))
                     }, clip.id, false, {
                         fileName: "[project]/app/components/feed/ClipFeed.tsx",
-                        lineNumber: 28,
-                        columnNumber: 11
-                    }, ("TURBOPACK compile-time value", void 0)))
+                        lineNumber: 35,
+                        columnNumber: 13
+                    }, ("TURBOPACK compile-time value", void 0));
+                })
             }, void 0, false, {
                 fileName: "[project]/app/components/feed/ClipFeed.tsx",
-                lineNumber: 20,
+                lineNumber: 24,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1657,19 +1673,19 @@ const ClipFeed = ({ clips })=>{
               ${i === activeIndex ? "h-6 bg-accent" : "h-1.5 bg-ink-700 hover:bg-ink-600"}`
                     }, clip.id, false, {
                         fileName: "[project]/app/components/feed/ClipFeed.tsx",
-                        lineNumber: 46,
+                        lineNumber: 57,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0)))
             }, void 0, false, {
                 fileName: "[project]/app/components/feed/ClipFeed.tsx",
-                lineNumber: 44,
+                lineNumber: 55,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$feed$2f$ScrollHint$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ScrollHint"], {
                 show: activeIndex === 0
             }, void 0, false, {
                 fileName: "[project]/app/components/feed/ClipFeed.tsx",
-                lineNumber: 60,
+                lineNumber: 71,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
