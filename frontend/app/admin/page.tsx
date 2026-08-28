@@ -20,12 +20,14 @@ function toExplainer(c: AdminClip): ExplainerClip {
     title: c.title,
     hook: c.hook,
     takeaway: c.takeaway,
+    category: c.category,
     scenes: c.scenes as ExplainerClip["scenes"],
   };
 }
 
 export default function AdminPage() {
   const [adminKey, setAdminKey] = useState("");
+  const [authed, setAuthed] = useState(false);
   const [title, setTitle] = useState("");
   const [source, setSource] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
@@ -38,16 +40,22 @@ export default function AdminPage() {
   const [showJson, setShowJson] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem(KEY_STORAGE);
+    const saved = sessionStorage.getItem(KEY_STORAGE);
     if (saved) setAdminKey(saved);
   }, []);
 
   const refresh = useCallback(async (key: string) => {
-    if (!key) return;
+    if (!key) {
+      setAuthed(false);
+      return;
+    }
     try {
-      setClips(await listAllClips(key));
+      const data = await listAllClips(key);
+      setClips(data);
+      setAuthed(true);
     } catch {
-      /* wrong key or backend down — leave list empty */
+      /* wrong key or backend down — leave list empty and not authed */
+      setAuthed(false);
     }
   }, []);
 
@@ -57,7 +65,7 @@ export default function AdminPage() {
 
   const saveKey = (key: string) => {
     setAdminKey(key);
-    localStorage.setItem(KEY_STORAGE, key);
+    sessionStorage.setItem(KEY_STORAGE, key);
   };
 
   const handleGenerate = async () => {
@@ -92,6 +100,27 @@ export default function AdminPage() {
     if (preview?.id === id) setPreview(null);
   };
 
+  if (!authed) {
+    return (
+      <main className="min-h-screen bg-ink-950 text-fg grid place-items-center p-6">
+        <div className="w-full max-w-sm flex flex-col gap-4 text-center">
+          <h1 className="font-display text-xl font-semibold">Pipeline access</h1>
+          <p className="text-sm text-fg-muted">
+            This dashboard reviews and publishes AI-generated explainers.
+          </p>
+          <input
+            type="password"
+            value={adminKey}
+            onChange={(e) => saveKey(e.target.value)}
+            placeholder="Admin key"
+            className="px-3 py-2.5 text-sm rounded-lg bg-ink-900 border border-ink-800 outline-none focus:border-accent/50 text-center"
+            autoFocus
+          />
+        </div>
+      </main>
+    );
+  }
+
   const canGenerate =
     adminKey.trim() &&
     title.trim() &&
@@ -110,13 +139,29 @@ export default function AdminPage() {
             Generate, preview and publish explainers
           </p>
         </div>
-        <input
-          type="password"
-          value={adminKey}
-          onChange={(e) => saveKey(e.target.value)}
-          placeholder="Admin key"
-          className="px-3 py-2 text-sm rounded-lg bg-ink-900 border border-ink-800 outline-none focus:border-accent/50 w-56"
-        />
+        <div className="flex items-center gap-4">
+          <input
+            type="password"
+            value={adminKey}
+            onChange={(e) => saveKey(e.target.value)}
+            placeholder="Admin key"
+            className="px-3 py-2 text-sm rounded-lg bg-ink-900 border border-ink-800 outline-none focus:border-accent/50 w-56"
+          />
+          {adminKey && (
+            <button
+              onClick={() => {
+                setAdminKey("");
+                sessionStorage.removeItem(KEY_STORAGE);
+                setClips([]);
+                setPreview(null);
+                setAuthed(false);
+              }}
+              className="text-xs text-fg-dim hover:text-fg transition cursor-pointer"
+            >
+              Sign out
+            </button>
+          )}
+        </div>
       </header>
 
       <div className="grid lg:grid-cols-2 gap-6 p-6">

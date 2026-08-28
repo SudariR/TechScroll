@@ -5,22 +5,31 @@
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
   /* surfaces */
-  --color-ink-950: #0a0a0b;
-  --color-ink-900: #111113;
-  --color-ink-800: #1a1a1d;
-  --color-ink-700: #26262b;
+  --color-ink-950: #0b0c10;
+  --color-ink-900: #14161c;
+  --color-ink-800: #1e212a;
+  --color-ink-700: #2b2f3b;
+  --color-ink-600: #3a3f4d;
 
   /* text */
-  --color-fg: #f4f4f5;
-  --color-fg-muted: #a1a1aa;
-  --color-fg-dim: #71717a;
+  --color-fg: #f7f8fa;
+  --color-fg-muted: #b4bac7;
+  --color-fg-dim: #7c8496;
 
-  /* accent */
+  /* primary accent (lime) */
   --color-accent: #00a800;
   --color-accent-bright: #22c922;
   --color-accent-soft: #00a8001f;
   --color-accent-border: #00a80059;
   --color-accent-dim: #007a00;
+
+  /* secondary accent 2 (electric cyan - data / growth) */
+  --color-accent-2: #4dd8ff;
+  --color-accent-2-soft: #4dd8ff1f;
+
+  /* secondary accent 3 (soft violet - time / sequence) */
+  --color-accent-3: #b48bff;
+  --color-accent-3-soft: #b48bff1f;
 
   /* semantic */
   --color-positive: #4ade80;
