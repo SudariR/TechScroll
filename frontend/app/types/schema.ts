@@ -64,5 +64,6 @@ export interface ExplainerClip {
   title: string;
   hook: string;
   takeaway: string;
+  category?: string;
   scenes: SceneData[];
 }

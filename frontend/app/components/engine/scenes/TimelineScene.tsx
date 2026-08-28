@@ -16,7 +16,7 @@ export const TimelineScene: React.FC<Props> = ({ data, isActive }) => {
 
   return (
     <div className="relative w-full h-full flex flex-col justify-center p-7 bg-ink-950 text-fg rounded-2xl overflow-hidden">
-      <div className="absolute -top-20 -right-16 w-64 h-64 bg-accent-soft rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-20 -right-16 w-64 h-64 bg-accent-3-soft rounded-full blur-3xl pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: -8 }}
@@ -24,7 +24,7 @@ export const TimelineScene: React.FC<Props> = ({ data, isActive }) => {
         transition={{ duration: 0.4 }}
         className="z-10 inline-flex self-start items-center gap-2 mb-7 px-3 py-1 rounded-full bg-ink-900/80 border border-ink-800"
       >
-        <Icon className="w-3.5 h-3.5 text-accent" />
+        <Icon className="w-3.5 h-3.5 text-accent-3" />
         <span className="text-[11px] font-semibold uppercase tracking-widest text-fg-muted">
           {data.topic}
         </span>
@@ -37,7 +37,7 @@ export const TimelineScene: React.FC<Props> = ({ data, isActive }) => {
           animate={isActive ? { scaleY: 1 } : { scaleY: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           className="absolute left-[7px] top-2 bottom-2 w-[2px] origin-top
-                     bg-gradient-to-b from-accent via-accent/50 to-transparent"
+                     bg-gradient-to-b from-accent-3 via-accent-3/50 to-transparent"
         />
 
         <div className="flex flex-col gap-6">
@@ -55,14 +55,14 @@ export const TimelineScene: React.FC<Props> = ({ data, isActive }) => {
             >
               {/* node */}
               <div className="relative shrink-0 mt-1">
-                <div className="w-4 h-4 rounded-full bg-ink-950 border-2 border-accent" />
+                <div className="w-4 h-4 rounded-full bg-ink-950 border-2 border-accent-3" />
                 {i === steps.length - 1 && (
-                  <div className="absolute inset-0 rounded-full bg-accent/25 blur-md" />
+                  <div className="absolute inset-0 rounded-full bg-accent-3/25 blur-md" />
                 )}
               </div>
 
               <div className="pb-0.5">
-                <span className="block text-[10px] font-bold uppercase tracking-widest text-accent mb-1">
+                <span className="block text-[10px] font-bold uppercase tracking-widest text-accent-3 mb-1">
                   {step.label}
                 </span>
                 <p className="text-sm md:text-[15px] text-fg leading-relaxed">
