@@ -4,7 +4,7 @@ import { writeFileSync } from 'node:fs';
 import { AppModule } from '../../app.module';
 import { AiService } from '../ai.service';
 import { EVAL_ARTICLES } from './fixtures/articles';
-import { runQualityChecks, QualityWarning } from './quality-checks';
+import { runQualityChecks, QualityWarning } from '../quality-checks';
 import { ExplainerValidationError } from '../../clips/schemas/validate-explainer';
 import { PROMPT_VERSION } from '../prompts/explainer.prompt';
 
@@ -107,12 +107,12 @@ function report(records: RunRecord[]) {
   console.log(`category accuracy    ${passed.filter(r => r.categoryMatch).length}/${passed.length}`);
   console.log(`avg latency          ${avg(records.map((r) => r.latencyMs))}ms`);
 
-//   const validationCounts = tally(records.flatMap((r) => r.validationIssues.map((i) => i.split(':')[0])));
-//  
-const validationCounts = tally(
-  records.flatMap((r) => r.validationIssues.map((i) => i.slice(0, 120)))
-);
- if (validationCounts.length) {
+  //   const validationCounts = tally(records.flatMap((r) => r.validationIssues.map((i) => i.split(':')[0])));
+  //  
+  const validationCounts = tally(
+    records.flatMap((r) => r.validationIssues.map((i) => i.slice(0, 120)))
+  );
+  if (validationCounts.length) {
     console.log(`\n-- validation failures by field --`);
     validationCounts.forEach(([k, n]) => console.log(`  ${n.toString().padStart(3)}  ${k}`));
   }
