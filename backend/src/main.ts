@@ -4,14 +4,20 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const origins = (process.env.CORS_ORIGINS ?? 'http://localhost:3000')
-    .split(',')
-    .map((o) => o.trim());
+  app.enableCors({
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true);
+      const ok =
+        origin === 'http://localhost:3000' ||
+        /\.vercel\.app$/.test(new URL(origin).hostname);
+      cb(null, ok);
+    },
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'x-admin-key'],
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  });
 
-  app.enableCors({ origin: origins, credentials: true });
   app.setGlobalPrefix('api');
-
-  // Railway injects PORT — must bind 0.0.0.0, not localhost
   await app.listen(process.env.PORT ?? 4000, '0.0.0.0');
 }
 bootstrap();
