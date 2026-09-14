@@ -7,6 +7,7 @@ import { runQualityChecks } from '../ai/quality-checks';
 import { RSS_SOURCES, MIN_CONTENT_WORDS } from './sources';
 import { Category, Prisma } from '@prisma/client';
 import { extract } from '@extractus/article-extractor';
+import { validateExplainer } from '../clips/schemas/validate-explainer';
 
 /** Warnings that indicate a layout or accuracy risk — these block auto-publish. */
 const BLOCKING_WARNINGS = new Set([
@@ -16,6 +17,8 @@ const BLOCKING_WARNINGS = new Set([
     'HOOK_EQUALS_TAKEAWAY',
     'MISSING_DURATION',
 ]);
+
+const MIN_AUTO_PUBLISH_IMPACT = 5;
 
 const stripHtml = (s: string) =>
     s.replace(/<[^>]*>/g, ' ').replace(/&\w+;/g, ' ').replace(/\s+/g, ' ').trim();
@@ -110,9 +113,64 @@ export class IngestService {
                     content: article.content,
                 });
 
-                const warnings = runQualityChecks(explainer);
+                // 1. Look up prior published clips with the same storyKey
+                const prior = await this.prisma.clip.findMany({
+                    where: { storyKey: explainer.story.key, published: true },
+                    orderBy: { publishedAt: 'asc' },
+                });
+
+                const chapterNumber = prior.length + 1;
+                let bridgeScene: any = null;
+                let finalScenes = explainer.scenes;
+
+                // 2. If chapterNumber > 1, generate and insert bridge scene
+                if (chapterNumber > 1) {
+                    const previousTakeaways = prior.slice(-3).map((c) => c.takeaway);
+                    const bridge = await this.ai.generateBridge({
+                        storyLabel: explainer.story.label,
+                        chapterNumber,
+                        previousTakeaways,
+                        currentTitle: explainer.title,
+                        currentHook: explainer.hook,
+                        currentTakeaway: explainer.takeaway,
+                    });
+
+                    if (bridge) {
+                        const candidateBridge = {
+                            id: 'bridge',
+                            template: 'Bridge' as const,
+                            icon: 'globe' as const,
+                            storyLabel: explainer.story.label,
+                            previously: bridge.previously,
+                            nowWhat: bridge.nowWhat,
+                            chapterNumber,
+                            duration: 7,
+                        };
+
+                        const candidateScenes = [
+                            explainer.scenes[0],
+                            candidateBridge,
+                            ...explainer.scenes.slice(1),
+                        ];
+
+                        try {
+                            validateExplainer({
+                                ...explainer,
+                                scenes: candidateScenes,
+                            });
+                            finalScenes = candidateScenes as any;
+                            bridgeScene = candidateBridge;
+                        } catch (err) {
+                            this.logger.warn(`Bridge scene validation failed: ${(err as Error).message}`);
+                        }
+                    }
+                }
+
+                const explainerForChecks = { ...explainer, scenes: finalScenes };
+                const warnings = runQualityChecks(explainerForChecks);
                 const blocking = warnings.filter((w) => BLOCKING_WARNINGS.has(w.code));
-                const autoPublish = blocking.length === 0;
+                const impactOk = explainer.impact.score >= MIN_AUTO_PUBLISH_IMPACT;
+                const autoPublish = blocking.length === 0 && impactOk;
 
                 const clip = await this.prisma.clip.create({
                     data: {
@@ -121,21 +179,38 @@ export class IngestService {
                         hook: explainer.hook,
                         takeaway: explainer.takeaway,
                         category: explainer.category as Category,
-                        scenes: explainer.scenes as unknown as Prisma.InputJsonValue,
+                        impactScore: explainer.impact.score,
+                        impactScope: explainer.impact.scope,
+                        impactHorizon: explainer.impact.horizon,
+                        impactReasoning: explainer.impact.reasoning,
+                        storyKey: explainer.story.key,
+                        storyLabel: explainer.story.label,
+                        entities: explainer.story.entities,
+                        chapterNumber,
+                        bridgeScene: bridgeScene as Prisma.InputJsonValue,
+                        scenes: finalScenes as unknown as Prisma.InputJsonValue,
                         model,
                         promptVersion,
                         qualityScore: Math.max(0, 100 - warnings.length * 8),
-                        reviewNotes: warnings as unknown as Prisma.InputJsonValue,
+                        reviewNotes: (
+                            !impactOk
+                                ? [...warnings, { code: 'LOW_IMPACT_SCORE', detail: `impact score ${explainer.impact.score} below threshold ${MIN_AUTO_PUBLISH_IMPACT}` }]
+                                : warnings
+                        ) as unknown as Prisma.InputJsonValue,
                         published: autoPublish,
                         publishedAt: autoPublish ? new Date() : null,
                         autoPublished: autoPublish,
                     },
                 });
 
-                this.logger.log(
-                    `${autoPublish ? 'AUTO-PUBLISHED' : 'HELD FOR REVIEW'}: ${clip.title}` +
-                    (blocking.length ? ` (${blocking.map((b) => b.code).join(', ')})` : ''),
-                );
+                if (autoPublish) {
+                    this.logger.log(`AUTO-PUBLISHED: ${clip.title}`);
+                } else {
+                    const reasons: string[] = [];
+                    if (!impactOk) reasons.push(`impact ${explainer.impact.score}/10`);
+                    if (blocking.length > 0) reasons.push(...blocking.map((b) => b.code));
+                    this.logger.log(`HELD (${reasons.join(', ')}): ${clip.title}`);
+                }
 
                 results.push({ id: clip.id, autoPublish });
             } catch (err) {
