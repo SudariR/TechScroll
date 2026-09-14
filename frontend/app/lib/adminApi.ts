@@ -12,8 +12,13 @@ export interface AdminClip {
   category: string;
   scenes: unknown;
   published: boolean;
+  featured: boolean;
   model: string | null;
   promptVersion: string | null;
+  impactScore?: number;
+  impactScope?: string;
+  impactHorizon?: string;
+  impactReasoning?: string;
   createdAt: string;
 }
 
@@ -42,6 +47,15 @@ export async function publishClip(adminKey: string, id: string): Promise<AdminCl
     headers: headers(adminKey),
   });
   if (!res.ok) throw new Error(`Failed to publish (${res.status})`);
+  return res.json();
+}
+
+export async function toggleFeatured(adminKey: string, id: string): Promise<AdminClip> {
+  const res = await fetch(`${BASE}/clips/${id}/feature`, {
+    method: 'POST',
+    headers: headers(adminKey),
+  });
+  if (!res.ok) throw new Error(`Failed to toggle featured (${res.status})`);
   return res.json();
 }
 

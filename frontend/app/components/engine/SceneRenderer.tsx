@@ -6,6 +6,7 @@ import { ComparisonScene } from "./scenes/ComparisonScene";
 import { StatisticScene } from "./scenes/StatisticScene";
 import { TimelineScene } from "./scenes/TimelineScene";
 import { CauseEffectScene } from "./scenes/CauseEffectScene";
+import { BridgeScene } from "./scenes/BridgeScene";
 
 // 1. The Registry Dictionary: Maps schema strings to React components
 const SCENE_REGISTRY: Record<
@@ -17,6 +18,7 @@ const SCENE_REGISTRY: Record<
   Statistic: StatisticScene,
   Timeline: TimelineScene,
   CauseEffect: CauseEffectScene,
+  Bridge: BridgeScene,
 };
 
 interface Props {

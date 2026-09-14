@@ -17,14 +17,19 @@ News Sources → Content Collector → AI Processing → Structured JSON
 
 ## Status
 
-🚧 In development — Week 1 of 4
+🚧 In development 
 
 - [x] JSON schema for scene templates
 - [x] Registry-based scene dispatcher
 - [x] Hero / Comparison / Statistic templates
 - [x] Auto-advancing clip player with progress bar
-- [ ] Timeline & Cause→Effect templates
-- [ ] Vertical swipe feed
+- [x] Timeline & Cause→Effect templates
+- [x] Vertical snap-scrolling swipe feed
+- [x] IntersectionObserver-driven active clip detection
+- [x] Keyboard navigation (scenes + clips)
+- [x] Windowed feed rendering — a constant 3 players stay mounted
+      regardless of feed length, keeping memory and listener count
+      flat as the feed scales
 - [ ] NestJS + Gemini content pipeline
 - [ ] Admin dashboard, auth, bookmarks
 

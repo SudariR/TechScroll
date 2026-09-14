@@ -5,6 +5,17 @@ const EXAMPLE = {
   hook: 'NVIDIA just overtook Microsoft to become the most valuable company on Earth.',
   takeaway: 'AI infrastructure is now reshaping global market dominance.',
   category: 'HARDWARE',
+  impact: {
+    score: 8,
+    scope: 'global',
+    horizon: 'years',
+    reasoning: "NVIDIA's dominance in AI compute concentrates architectural and market control in a single hardware provider.",
+  },
+  story: {
+    key: 'nvidia-ai-hardware-dominance',
+    label: 'NVIDIA AI Hardware Dominance',
+    entities: ['NVIDIA', 'Microsoft', 'Apple'],
+  },
   scenes: [
     {
       id: 's1', template: 'Hero', icon: 'cpu', tag: 'AI Hardware',
@@ -100,6 +111,46 @@ never a company name. Omit them if unsure.
 
 CATEGORY
 One of: AI, PROGRAMMING, CYBERSECURITY, STARTUPS, CLOUD, HARDWARE, MOBILE, OPEN_SOURCE
+
+IMPACT ASSESSMENT
+Before writing scenes, assess how much this story actually matters. Be strict.
+Most news is not important. A high score must be earned.
+
+  1-2  Announcement, event, PR, funding with no product or market consequence
+  3-4  Incremental product update affecting a narrow group
+  5-6  Meaningful change for a specific industry or developer community
+  7-8  Shifts how an industry operates, or affects millions of people
+  9-10 Structural change to technology, regulation, or the economy
+
+scope    — individual: affects users directly
+           industry:   affects companies and professionals in a sector
+           global:     affects markets, governments or society broadly
+horizon  — now / months / years, i.e. when consequences land
+reasoning — one sentence, concrete, no hedging. Explain the score, do not
+            restate the headline.
+
+Do not inflate the score to make the story seem worth reading. A score of 3 is
+a correct and useful answer.
+
+STORY IDENTITY
+Identify the ongoing storyline this article belongs to.
+
+story.key   A stable kebab-case identifier for the STORYLINE, not this article.
+            It must be general enough that a follow-up article three weeks later
+            produces the SAME key, and specific enough not to collide with
+            unrelated news.
+            Good: "us-chip-export-controls", "openai-governance",
+                  "npm-supply-chain-attacks", "eu-ai-act-rollout"
+            Bad:  "nvidia" (too broad), "nvidia-q3-2026-earnings-beat" (too specific)
+
+story.label A human-readable name for the storyline, title case, no punctuation.
+            Example: "US Chip Export Controls"
+
+story.entities The 1-5 organisations, technologies or regulations central to the
+            story. Proper nouns only. No generic words like "AI" or "software".
+
+If the article is genuinely standalone with no plausible follow-up, still emit a
+key derived from its central subject. Do not invent a storyline that does not exist.
 `.trim();
 
 export function buildUserPrompt(article: { title: string; content: string }) {
@@ -131,6 +182,7 @@ VALIDATION ERRORS:
 ${issues.map((i) => `- ${i.path}: ${i.message}`).join('\n')}
 
 Fix ONLY these problems. Keep everything else identical.
+Return a single JSON object. Do not wrap it in an array.
 Return the corrected JSON.
 `.trim();
 }

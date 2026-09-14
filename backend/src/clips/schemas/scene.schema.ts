@@ -45,7 +45,7 @@ export const comparisonSceneSchema = z.object({
   rightValue: z.string().min(2).max(48),
   leftDomain: domainSchema,
   rightDomain: domainSchema,
-  emphasis: z.enum(['left', 'right', 'none']).optional(),
+  emphasis: z.enum(['left', 'right', 'none']).catch('right').optional(),
 });
 
 export const statisticSceneSchema = z.object({
@@ -58,7 +58,7 @@ export const statisticSceneSchema = z.object({
 });
 
 export const timelineStepSchema = z.object({
-  label: z.string().min(1).max(16),
+  label: z.string().min(1).max(28),
   text: z.string().min(10).max(100),
 });
 
@@ -79,6 +79,15 @@ export const causeEffectSceneSchema = z.object({
   effectLabel: z.string().max(28).optional(),
 });
 
+export const bridgeSceneSchema = z.object({
+  ...baseFields,
+  template: z.literal('Bridge'),
+  storyLabel: z.string().min(4).max(40),
+  previously: z.string().min(20).max(180), // what the reader last knew
+  nowWhat: z.string().min(20).max(180), // what has changed
+  chapterNumber: z.number().int().min(2).max(99),
+});
+
 /* ------------------------------------------------------------------ */
 /* The union                                                           */
 /* ------------------------------------------------------------------ */
@@ -89,6 +98,7 @@ export const sceneSchema = z.discriminatedUnion('template', [
   statisticSceneSchema,
   timelineSceneSchema,
   causeEffectSceneSchema,
+  bridgeSceneSchema,
 ]);
 
 export type Scene = z.infer<typeof sceneSchema>;
