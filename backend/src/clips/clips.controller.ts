@@ -22,6 +22,17 @@ export class ClipsController {
     return this.clips.countsByRange();
   }
 
+  @Get('threads')
+  threads(@Query('limit') limit?: string) {
+    const parsedLimit = limit ? parseInt(limit, 10) : 12;
+    return this.clips.findThreads(Number.isNaN(parsedLimit) ? 12 : parsedLimit);
+  }
+
+  @Get('threads/:storyKey')
+  thread(@Param('storyKey') storyKey: string) {
+    return this.clips.findThread(storyKey);
+  }
+
   @Get('all')
   all(@Headers('x-admin-key') key?: string) {
     this.assertAdmin(key);

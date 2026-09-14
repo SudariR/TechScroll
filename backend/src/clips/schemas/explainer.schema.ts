@@ -12,6 +12,17 @@ export const explainerSchema = z
     hook: z.string().min(20).max(140),
     takeaway: z.string().min(20).max(160),
     category: z.enum(CATEGORIES),
+    impact: z.object({
+      score: z.number().int().min(1).max(10),
+      scope: z.enum(['individual', 'industry', 'global']),
+      horizon: z.enum(['now', 'months', 'years']),
+      reasoning: z.string().min(20).max(160),
+    }),
+    story: z.object({
+      key: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).min(6).max(48),
+      label: z.string().min(4).max(40),
+      entities: z.array(z.string().min(2).max(32)).min(1).max(5),
+    }),
     scenes: z.array(sceneSchema).min(3).max(6),
   })
   .superRefine((clip, ctx) => {

@@ -1,6 +1,10 @@
-export type SceneTemplate = 'Hero' | 'Comparison' | 'Statistic'| 'Timeline'
-  | 'CauseEffect';
-;
+export type SceneTemplate =
+  | 'Hero'
+  | 'Comparison'
+  | 'Statistic'
+  | 'Timeline'
+  | 'CauseEffect'
+  | 'Bridge';
 
 export interface BaseScene {
   id: string;
@@ -37,10 +41,12 @@ export interface StatisticSceneData extends BaseScene {
   context: string;
   trend?: 'up' | 'down' | 'neutral'; 
 }
+
 export interface TimelineStep {
   label: string;   // "Jan 2023" — the time marker
   text: string;    // what happened
 }
+
 export interface TimelineSceneData extends BaseScene {
   template: 'Timeline';
   topic: string;
@@ -56,8 +62,21 @@ export interface CauseEffectSceneData extends BaseScene {
   effectLabel?: string;
 }
 
+export interface BridgeSceneData extends BaseScene {
+  template: 'Bridge';
+  storyLabel: string;
+  previously: string;
+  nowWhat: string;
+  chapterNumber: number;
+}
 
-export type SceneData = HeroSceneData | ComparisonSceneData | StatisticSceneData | TimelineSceneData | CauseEffectSceneData;
+export type SceneData =
+  | HeroSceneData
+  | ComparisonSceneData
+  | StatisticSceneData
+  | TimelineSceneData
+  | CauseEffectSceneData
+  | BridgeSceneData;
 
 export interface ExplainerClip {
   id: string;
@@ -67,5 +86,24 @@ export interface ExplainerClip {
   category?: string;
   publishedAt?: string;
   autoPublished?: boolean;
+  impactScore?: number;
+  impactScope?: string;
+  impactHorizon?: string;
+  impactReasoning?: string;
+  storyKey?: string | null;
+  storyLabel?: string | null;
+  chapterNumber?: number;
+  entities?: string[];
+  bridgeScene?: BridgeSceneData | null;
   scenes: SceneData[];
+}
+
+export interface StoryThread {
+  storyKey: string;
+  storyLabel: string;
+  chapterCount: number;
+  latestPublishedAt: string;
+  topImpactScore: number;
+  entities: string[];
+  latestTitle: string;
 }

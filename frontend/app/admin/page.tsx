@@ -22,6 +22,10 @@ function toExplainer(c: AdminClip): ExplainerClip {
     hook: c.hook,
     takeaway: c.takeaway,
     category: c.category,
+    impactScore: c.impactScore,
+    impactScope: c.impactScope,
+    impactHorizon: c.impactHorizon,
+    impactReasoning: c.impactReasoning,
     scenes: c.scenes as ExplainerClip["scenes"],
   };
 }

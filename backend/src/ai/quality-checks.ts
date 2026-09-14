@@ -120,5 +120,31 @@ export function runQualityChecks(clip: Explainer): QualityWarning[] {
     });
   });
 
+  /* --- impact assessment --- */
+
+  if (clip.impact?.reasoning) {
+    const reasoning = clip.impact.reasoning.trim();
+    if (reasoning.length < 40) {
+      push(
+        'IMPACT_REASONING_WEAK',
+        `reasoning is only ${reasoning.length} chars (minimum 40)`,
+      );
+    } else {
+      const titleWords = new Set(
+        norm(clip.title)
+          .split(/\s+/)
+          .filter((w) => w.length > 2),
+      );
+      const firstSixWords = norm(reasoning)
+        .split(/\s+/)
+        .slice(0, 6)
+        .filter((w) => w.length > 2);
+      const overlapCount = firstSixWords.filter((w) => titleWords.has(w)).length;
+      if (firstSixWords.length > 0 && overlapCount / firstSixWords.length >= 0.5) {
+        push('IMPACT_REASONING_WEAK', 'reasoning heavily overlaps with clip title');
+      }
+    }
+  }
+
   return warnings;
 }

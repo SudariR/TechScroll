@@ -11,10 +11,7 @@ interface FeedPageProps {
 export default async function FeedPage({ searchParams }: FeedPageProps) {
   const params = await searchParams;
   const rawRange = params?.range;
-  const range: FeedRange =
-    rawRange === 'week' || rawRange === 'all' || rawRange === 'today'
-      ? rawRange
-      : 'today';
+  const range: FeedRange = rawRange === 'week' ? 'week' : 'today';
 
   let clips = MOCK_FEED;
   let counts = { today: 0, week: 0, all: 0 };

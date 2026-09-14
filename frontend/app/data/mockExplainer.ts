@@ -9,6 +9,14 @@ export const MOCK_NVIDIA_EXPLAINER: ExplainerClip = {
   hook: 'NVIDIA just overtook Microsoft to become the most valuable company on Earth.',
   takeaway: 'AI infrastructure is now reshaping global market dominance.',
   category: 'AI Hardware',
+  storyKey: 'nvidia-ai-dominance',
+  storyLabel: 'NVIDIA AI Hardware Dominance',
+  chapterNumber: 1,
+  entities: ['NVIDIA', 'Microsoft', 'Apple'],
+  impactScore: 8,
+  impactScope: 'global',
+  impactHorizon: 'years',
+  impactReasoning: "NVIDIA's dominance in AI compute concentrates architectural control in a single hardware provider.",
   scenes: [
     {
       id: 'c1-s1',
@@ -88,6 +96,14 @@ export const MOCK_SECURITY_EXPLAINER: ExplainerClip = {
   takeaway:
     'Modern software is assembled, not written — so trust is the real attack surface.',
   category: 'Cybersecurity',
+  storyKey: 'npm-supply-chain-attacks',
+  storyLabel: 'NPM Supply Chain Attacks',
+  chapterNumber: 2,
+  entities: ['npm', 'JavaScript', 'GitHub'],
+  impactScore: 7,
+  impactScope: 'industry',
+  impactHorizon: 'months',
+  impactReasoning: 'Open source registry infiltration threatens thousands of downstream production deployments.',
   scenes: [
     {
       id: 'c2-s1',
@@ -98,6 +114,16 @@ export const MOCK_SECURITY_EXPLAINER: ExplainerClip = {
       subtitle:
         'Attackers no longer break into apps. They break into the libraries those apps depend on.',
       duration: 5,
+    },
+    {
+      id: 'c2-bridge',
+      template: 'Bridge',
+      icon: 'shield',
+      storyLabel: 'NPM Supply Chain Attacks',
+      previously: 'Initial attacks targeted maintainer credentials with malicious automated scripts.',
+      nowWhat: 'Attackers now publish polymorphic payload versions to evade static CI security scanners.',
+      chapterNumber: 2,
+      duration: 7,
     },
     {
       id: 'c2-s2',

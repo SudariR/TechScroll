@@ -49,8 +49,21 @@ model Clip {
   qualityScore  Int?
   reviewNotes   Json?
 
+  impactScore     Int      @default(5)
+  impactScope     String?
+  impactHorizon   String?
+  impactReasoning String?
+
+  storyKey      String?
+  storyLabel    String?
+  entities      String[]  @default([])
+  chapterNumber Int       @default(1)
+  bridgeScene   Json?
+
   @@index([published, featured, publishedAt])
+  @@index([published, impactScore, publishedAt])
   @@index([category])
+  @@index([storyKey, publishedAt])
 }
 
 enum Category {
