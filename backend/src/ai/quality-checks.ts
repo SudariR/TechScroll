@@ -6,9 +6,20 @@ export interface QualityWarning {
 }
 
 const HYPE_WORDS = [
-  'revolutionary', 'game-changing', 'game changing', 'groundbreaking',
-  'cutting-edge', 'unprecedented', 'seamless', 'robust', 'leverage',
-  'disrupt', 'supercharge', 'unlock', 'transformative', 'next-level',
+  'revolutionary',
+  'game-changing',
+  'game changing',
+  'groundbreaking',
+  'cutting-edge',
+  'unprecedented',
+  'seamless',
+  'robust',
+  'leverage',
+  'disrupt',
+  'supercharge',
+  'unlock',
+  'transformative',
+  'next-level',
 ];
 
 /** Approximate reading speed used to sanity-check durations. */
@@ -27,7 +38,8 @@ function sceneText(scene: any): string {
 
 export function runQualityChecks(clip: Explainer): QualityWarning[] {
   const warnings: QualityWarning[] = [];
-  const push = (code: string, detail: string) => warnings.push({ code, detail });
+  const push = (code: string, detail: string) =>
+    warnings.push({ code, detail });
 
   /* --- structure --- */
 
@@ -35,22 +47,32 @@ export function runQualityChecks(clip: Explainer): QualityWarning[] {
 
   for (let i = 1; i < templates.length; i++) {
     if (templates[i] === templates[i - 1]) {
-      push('ADJACENT_DUPLICATE_TEMPLATE', `${templates[i]} repeats at scene ${i + 1}`);
+      push(
+        'ADJACENT_DUPLICATE_TEMPLATE',
+        `${templates[i]} repeats at scene ${i + 1}`,
+      );
     }
   }
 
   if (new Set(templates).size < 3) {
-    push('LOW_TEMPLATE_VARIETY', `only ${new Set(templates).size} distinct templates used`);
+    push(
+      'LOW_TEMPLATE_VARIETY',
+      `only ${new Set(templates).size} distinct templates used`,
+    );
   }
 
   if (clip.scenes.length < 4 || clip.scenes.length > 5) {
-    push('SCENE_COUNT_OUTSIDE_TARGET', `${clip.scenes.length} scenes (target 4-5)`);
+    push(
+      'SCENE_COUNT_OUTSIDE_TARGET',
+      `${clip.scenes.length} scenes (target 4-5)`,
+    );
   }
 
   /* --- icons --- */
 
   clip.scenes.forEach((s, i) => {
-    if (!s.icon) push('MISSING_ICON', `scene ${i + 1} (${s.template}) has no icon`);
+    if (!s.icon)
+      push('MISSING_ICON', `scene ${i + 1} (${s.template}) has no icon`);
   });
 
   /* --- durations --- */
@@ -73,9 +95,13 @@ export function runQualityChecks(clip: Explainer): QualityWarning[] {
   /* --- language --- */
 
   const allText = [
-    clip.title, clip.hook, clip.takeaway,
+    clip.title,
+    clip.hook,
+    clip.takeaway,
     ...clip.scenes.map(sceneText),
-  ].join(' ').toLowerCase();
+  ]
+    .join(' ')
+    .toLowerCase();
 
   HYPE_WORDS.forEach((word) => {
     if (allText.includes(word)) push('HYPE_LANGUAGE', `contains "${word}"`);
@@ -83,7 +109,11 @@ export function runQualityChecks(clip: Explainer): QualityWarning[] {
 
   /* --- redundancy --- */
 
-  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
+  const norm = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9 ]/g, '')
+      .trim();
   if (norm(clip.hook) === norm(clip.takeaway)) {
     push('HOOK_EQUALS_TAKEAWAY', 'hook and takeaway are identical');
   }
@@ -97,15 +127,23 @@ export function runQualityChecks(clip: Explainer): QualityWarning[] {
 
   clip.scenes.forEach((s, i) => {
     if (s.template === 'Statistic' && !/\d/.test(s.value)) {
-      push('STATISTIC_WITHOUT_NUMBER', `scene ${i + 1} value "${s.value}" has no digit`);
+      push(
+        'STATISTIC_WITHOUT_NUMBER',
+        `scene ${i + 1} value "${s.value}" has no digit`,
+      );
     }
   });
 
   /* --- near-truncation risk --- */
 
   const LIMITS: Record<string, number> = {
-    title: 48, subtitle: 160, leftValue: 48, rightValue: 48,
-    context: 140, cause: 160, effect: 160,
+    title: 48,
+    subtitle: 160,
+    leftValue: 48,
+    rightValue: 48,
+    context: 140,
+    cause: 160,
+    effect: 160,
   };
 
   clip.scenes.forEach((s, i) => {
@@ -139,9 +177,17 @@ export function runQualityChecks(clip: Explainer): QualityWarning[] {
         .split(/\s+/)
         .slice(0, 6)
         .filter((w) => w.length > 2);
-      const overlapCount = firstSixWords.filter((w) => titleWords.has(w)).length;
-      if (firstSixWords.length > 0 && overlapCount / firstSixWords.length >= 0.5) {
-        push('IMPACT_REASONING_WEAK', 'reasoning heavily overlaps with clip title');
+      const overlapCount = firstSixWords.filter((w) =>
+        titleWords.has(w),
+      ).length;
+      if (
+        firstSixWords.length > 0 &&
+        overlapCount / firstSixWords.length >= 0.5
+      ) {
+        push(
+          'IMPACT_REASONING_WEAK',
+          'reasoning heavily overlaps with clip title',
+        );
       }
     }
   }

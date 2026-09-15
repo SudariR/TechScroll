@@ -5,8 +5,18 @@ import { z } from 'zod';
 /* ------------------------------------------------------------------ */
 
 export const ICON_NAMES = [
-  'cpu', 'shield', 'zap', 'trending-up', 'database', 'cloud',
-  'lock', 'bug', 'rocket', 'globe', 'code', 'brain',
+  'cpu',
+  'shield',
+  'zap',
+  'trending-up',
+  'database',
+  'cloud',
+  'lock',
+  'bug',
+  'rocket',
+  'globe',
+  'code',
+  'brain',
 ] as const;
 
 const iconSchema = z.enum(ICON_NAMES).optional();
@@ -20,7 +30,10 @@ const baseFields = {
 /* domains like "nvidia.com" — never full URLs */
 const domainSchema = z
   .string()
-  .regex(/^[a-z0-9-]+(\.[a-z0-9-]+)+$/i, 'must be a bare domain, e.g. nvidia.com')
+  .regex(
+    /^[a-z0-9-]+(\.[a-z0-9-]+)+$/i,
+    'must be a bare domain, e.g. nvidia.com',
+  )
   .optional();
 
 /* ------------------------------------------------------------------ */

@@ -1,5 +1,13 @@
 import {
-  Body, Controller, Delete, Get, Param, Post, Query, Headers, UnauthorizedException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  Headers,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ClipsService } from './clips.service';
 
@@ -13,7 +21,10 @@ export class ClipsController {
 
   @Get()
   list(@Query('range') range?: string) {
-    const validRange = range === 'today' || range === 'week' || range === 'all' ? range : 'today';
+    const validRange =
+      range === 'today' || range === 'week' || range === 'all'
+        ? range
+        : 'today';
     return this.clips.findPublished(validRange);
   }
 
@@ -41,7 +52,13 @@ export class ClipsController {
 
   @Post('generate')
   generate(
-    @Body() body: { title: string; source: string; content: string; sourceUrl?: string },
+    @Body()
+    body: {
+      title: string;
+      source: string;
+      content: string;
+      sourceUrl?: string;
+    },
     @Headers('x-admin-key') key?: string,
   ) {
     this.assertAdmin(key);

@@ -28,9 +28,17 @@ const CLIP_PUBLIC_SELECT = {
 export class ClipsService {
   private readonly logger = new Logger(ClipsService.name);
 
-  constructor(private prisma: PrismaService, private ai: AiService) {}
+  constructor(
+    private prisma: PrismaService,
+    private ai: AiService,
+  ) {}
 
-  async generate(input: { title: string; source: string; content: string; sourceUrl?: string }) {
+  async generate(input: {
+    title: string;
+    source: string;
+    content: string;
+    sourceUrl?: string;
+  }) {
     const article = await this.prisma.article.create({
       data: {
         title: input.title,
@@ -88,10 +96,12 @@ export class ClipsService {
             ...result.explainer,
             scenes: candidateScenes,
           });
-          finalScenes = candidateScenes as any;
+          finalScenes = candidateScenes;
           bridgeScene = candidateBridge;
         } catch (err) {
-          this.logger.warn(`Bridge scene validation failed in generate: ${(err as Error).message}`);
+          this.logger.warn(
+            `Bridge scene validation failed in generate: ${(err as Error).message}`,
+          );
         }
       }
     }
@@ -102,7 +112,7 @@ export class ClipsService {
         title: result.explainer.title,
         hook: result.explainer.hook,
         takeaway: result.explainer.takeaway,
-        category: result.explainer.category as Category,
+        category: result.explainer.category,
         impactScore: result.explainer.impact.score,
         impactScope: result.explainer.impact.scope,
         impactHorizon: result.explainer.impact.horizon,
@@ -112,7 +122,7 @@ export class ClipsService {
         entities: result.explainer.story.entities,
         chapterNumber,
         bridgeScene: bridgeScene as Prisma.InputJsonValue,
-        scenes: finalScenes as unknown as Prisma.InputJsonValue,
+        scenes: finalScenes,
         model: result.model,
         promptVersion: result.promptVersion,
       },
@@ -130,7 +140,10 @@ export class ClipsService {
     if (range === 'today') {
       where = { published: true, publishedAt: { gte: startOfDay } };
     } else if (range === 'week') {
-      where = { published: true, publishedAt: { gte: weekAgo, lt: startOfDay } };
+      where = {
+        published: true,
+        publishedAt: { gte: weekAgo, lt: startOfDay },
+      };
     } else {
       where = { published: true };
     }
@@ -217,7 +230,9 @@ export class ClipsService {
 
     const threads = Array.from(threadMap.values())
       .filter((t) => t.chapterCount >= 2)
-      .sort((a, b) => b.latestPublishedAt.getTime() - a.latestPublishedAt.getTime())
+      .sort(
+        (a, b) => b.latestPublishedAt.getTime() - a.latestPublishedAt.getTime(),
+      )
       .slice(0, limit);
 
     return threads;
@@ -235,12 +250,21 @@ export class ClipsService {
   }
 
   async countsByRange() {
-    const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
-    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
 
     const [today, week, all] = await Promise.all([
-      this.prisma.clip.count({ where: { published: true, publishedAt: { gte: startOfDay } } }),
-      this.prisma.clip.count({ where: { published: true, publishedAt: { gte: weekAgo, lt: startOfDay } } }),
+      this.prisma.clip.count({
+        where: { published: true, publishedAt: { gte: startOfDay } },
+      }),
+      this.prisma.clip.count({
+        where: {
+          published: true,
+          publishedAt: { gte: weekAgo, lt: startOfDay },
+        },
+      }),
       this.prisma.clip.count({ where: { published: true } }),
     ]);
 
@@ -248,7 +272,10 @@ export class ClipsService {
   }
 
   findAll() {
-    return this.prisma.clip.findMany({ orderBy: { createdAt: 'desc' }, take: 50 });
+    return this.prisma.clip.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    });
   }
 
   publish(id: string) {

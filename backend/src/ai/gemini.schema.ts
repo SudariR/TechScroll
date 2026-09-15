@@ -8,7 +8,20 @@ const sceneProps = {
   },
   icon: {
     type: Type.STRING,
-    enum: ['cpu','shield','zap','trending-up','database','cloud','lock','bug','rocket','globe','code','brain'],
+    enum: [
+      'cpu',
+      'shield',
+      'zap',
+      'trending-up',
+      'database',
+      'cloud',
+      'lock',
+      'bug',
+      'rocket',
+      'globe',
+      'code',
+      'brain',
+    ],
   },
   duration: { type: Type.NUMBER },
 
@@ -58,11 +71,24 @@ export const EXPLAINER_RESPONSE_SCHEMA = {
     takeaway: { type: Type.STRING },
     category: {
       type: Type.STRING,
-      enum: ['AI','PROGRAMMING','CYBERSECURITY','STARTUPS','CLOUD','HARDWARE','MOBILE','OPEN_SOURCE'],
+      enum: [
+        'AI',
+        'PROGRAMMING',
+        'CYBERSECURITY',
+        'STARTUPS',
+        'CLOUD',
+        'HARDWARE',
+        'MOBILE',
+        'OPEN_SOURCE',
+      ],
     },
     scenes: {
       type: Type.ARRAY,
-      items: { type: Type.OBJECT, properties: sceneProps, required: ['id', 'template'] },
+      items: {
+        type: Type.OBJECT,
+        properties: sceneProps,
+        required: ['id', 'template'],
+      },
     },
   },
   required: ['title', 'hook', 'takeaway', 'category', 'scenes'],

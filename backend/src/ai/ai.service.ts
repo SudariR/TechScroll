@@ -3,10 +3,16 @@ import { ConfigService } from '@nestjs/config';
 import { GoogleGenAI } from '@google/genai';
 import { z } from 'zod';
 import {
-  SYSTEM_INSTRUCTION, buildUserPrompt, buildRepairPrompt, PROMPT_VERSION,
+  SYSTEM_INSTRUCTION,
+  buildUserPrompt,
+  buildRepairPrompt,
+  PROMPT_VERSION,
 } from './prompts/explainer.prompt';
 import { buildBridgePrompt } from './prompts/bridge.prompt';
-import { validateExplainer, ExplainerValidationError } from '../clips/schemas/validate-explainer';
+import {
+  validateExplainer,
+  ExplainerValidationError,
+} from '../clips/schemas/validate-explainer';
 import type { Explainer } from '../clips/schemas/explainer.schema';
 
 const MODEL = 'gemini-3.5-flash-lite';
@@ -35,7 +41,10 @@ export class AiService {
     });
   }
 
-  async generateExplainer(article: { title: string; content: string }): Promise<GenerationResult> {
+  async generateExplainer(article: {
+    title: string;
+    content: string;
+  }): Promise<GenerationResult> {
     let prompt = buildUserPrompt(article);
     let lastRaw = '';
 
@@ -57,7 +66,12 @@ export class AiService {
         const explainer = validateExplainer(parsed);
 
         this.logger.log(`Generated explainer in ${attempt} attempt(s)`);
-        return { explainer, model: MODEL, promptVersion: PROMPT_VERSION, attempts: attempt };
+        return {
+          explainer,
+          model: MODEL,
+          promptVersion: PROMPT_VERSION,
+          attempts: attempt,
+        };
       } catch (err) {
         if (attempt > MAX_REPAIRS) throw err;
 
@@ -66,7 +80,9 @@ export class AiService {
             ? err.issues
             : [{ path: '(root)', message: 'output was not valid JSON' }];
 
-        this.logger.warn(`Attempt ${attempt} failed: ${issues.map(i => i.path).join(', ')}`);
+        this.logger.warn(
+          `Attempt ${attempt} failed: ${issues.map((i) => i.path).join(', ')}`,
+        );
         this.logger.error(`Raw output:\n${lastRaw.slice(0, 800)}`);
         prompt = buildRepairPrompt(lastRaw, issues);
       }
@@ -98,7 +114,9 @@ export class AiService {
       const parsed = JSON.parse(raw);
       const validated = bridgeSchema.parse(parsed);
 
-      this.logger.log(`Generated bridge for chapter ${input.chapterNumber} of "${input.storyLabel}"`);
+      this.logger.log(
+        `Generated bridge for chapter ${input.chapterNumber} of "${input.storyLabel}"`,
+      );
       return validated;
     } catch (err) {
       this.logger.warn(

@@ -9,7 +9,8 @@ const EXAMPLE = {
     score: 8,
     scope: 'global',
     horizon: 'years',
-    reasoning: "NVIDIA's dominance in AI compute concentrates architectural and market control in a single hardware provider.",
+    reasoning:
+      "NVIDIA's dominance in AI compute concentrates architectural and market control in a single hardware provider.",
   },
   story: {
     key: 'nvidia-ai-hardware-dominance',
@@ -18,32 +19,54 @@ const EXAMPLE = {
   },
   scenes: [
     {
-      id: 's1', template: 'Hero', icon: 'cpu', tag: 'AI Hardware',
+      id: 's1',
+      template: 'Hero',
+      icon: 'cpu',
+      tag: 'AI Hardware',
       title: 'NVIDIA Becomes #1',
-      subtitle: 'For the first time in history, a chipmaker is worth more than Microsoft and Apple.',
+      subtitle:
+        'For the first time in history, a chipmaker is worth more than Microsoft and Apple.',
       duration: 5,
     },
     {
-      id: 's2', template: 'Timeline', icon: 'rocket', topic: 'How NVIDIA Got Here',
+      id: 's2',
+      template: 'Timeline',
+      icon: 'rocket',
+      topic: 'How NVIDIA Got Here',
       steps: [
         { label: '1999', text: 'Invents the GPU for video games.' },
-        { label: '2012', text: 'Researchers find GPUs train neural networks far faster.' },
-        { label: '2023', text: 'The AI boom makes its chips the industry bottleneck.' },
+        {
+          label: '2012',
+          text: 'Researchers find GPUs train neural networks far faster.',
+        },
+        {
+          label: '2023',
+          text: 'The AI boom makes its chips the industry bottleneck.',
+        },
       ],
       duration: 7,
     },
     {
-      id: 's3', template: 'Statistic', icon: 'trending-up',
-      label: 'AI Data Center Demand', value: '+427%',
+      id: 's3',
+      template: 'Statistic',
+      icon: 'trending-up',
+      label: 'AI Data Center Demand',
+      value: '+427%',
       context: 'Year-over-year revenue growth driven by AI data center GPUs.',
-      trend: 'up', duration: 5,
+      trend: 'up',
+      duration: 5,
     },
     {
-      id: 's4', template: 'CauseEffect', icon: 'brain', topic: 'Why It Matters To You',
+      id: 's4',
+      template: 'CauseEffect',
+      icon: 'brain',
+      topic: 'Why It Matters To You',
       causeLabel: 'What happened',
-      cause: 'Every major AI model is trained on NVIDIA hardware, giving one company control of the supply.',
+      cause:
+        'Every major AI model is trained on NVIDIA hardware, giving one company control of the supply.',
       effectLabel: 'What it means',
-      effect: 'The pace of AI progress — and its cost — now depends on a single chipmaker.',
+      effect:
+        'The pace of AI progress — and its cost — now depends on a single chipmaker.',
       duration: 7,
     },
   ],

@@ -2,8 +2,14 @@ import { z } from 'zod';
 import { sceneSchema } from './scene.schema';
 
 export const CATEGORIES = [
-  'AI', 'PROGRAMMING', 'CYBERSECURITY', 'STARTUPS',
-  'CLOUD', 'HARDWARE', 'MOBILE', 'OPEN_SOURCE',
+  'AI',
+  'PROGRAMMING',
+  'CYBERSECURITY',
+  'STARTUPS',
+  'CLOUD',
+  'HARDWARE',
+  'MOBILE',
+  'OPEN_SOURCE',
 ] as const;
 
 export const explainerSchema = z
@@ -19,7 +25,11 @@ export const explainerSchema = z
       reasoning: z.string().min(20).max(160),
     }),
     story: z.object({
-      key: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).min(6).max(48),
+      key: z
+        .string()
+        .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/)
+        .min(6)
+        .max(48),
       label: z.string().min(4).max(40),
       entities: z.array(z.string().min(2).max(32)).min(1).max(5),
     }),
@@ -37,22 +47,25 @@ export const explainerSchema = z
     }
 
     /* every clip must open with a Hero */
-    if (clip.scenes[0]?.template !== 'Hero') {
+    if (clip.scenes.length > 0 && clip.scenes[0]?.template !== 'Hero') {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ['scenes', 0],
+        path: ['scenes', 0, 'template'],
         message: 'the first scene must use the Hero template',
       });
     }
 
     /* and land on impact, not a raw number */
-    const last = clip.scenes[clip.scenes.length - 1]?.template;
-    if (last !== 'CauseEffect' && last !== 'Statistic') {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['scenes', clip.scenes.length - 1],
-        message: 'the final scene must be CauseEffect or Statistic',
-      });
+    if (clip.scenes.length > 0) {
+      const lastIndex = clip.scenes.length - 1;
+      const last = clip.scenes[lastIndex]?.template;
+      if (last !== 'CauseEffect' && last !== 'Statistic') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['scenes', lastIndex, 'template'],
+          message: 'the final scene must be CauseEffect or Statistic',
+        });
+      }
     }
   });
 
