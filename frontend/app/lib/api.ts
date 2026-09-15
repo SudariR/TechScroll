@@ -1,4 +1,4 @@
-import { ExplainerClip, StoryThread } from '../types/schema';
+import { ExplainerClip, StoryThread, BridgeSceneData } from '../types/schema';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
@@ -20,7 +20,7 @@ interface ApiClip {
   storyLabel?: string | null;
   chapterNumber?: number;
   entities?: string[];
-  bridgeScene?: any;
+  bridgeScene?: BridgeSceneData | null;
   scenes: unknown;
 }
 

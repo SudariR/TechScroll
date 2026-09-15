@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { BridgeSceneData } from "../../../types/schema";
-import { getIcon } from "../../../lib/iconRegistry";
+import { SceneIcon } from "../SceneIcon";
 
 interface Props {
   data: BridgeSceneData;
@@ -11,8 +11,6 @@ interface Props {
 }
 
 export const BridgeScene: React.FC<Props> = ({ data, isActive }) => {
-  const Icon = getIcon(data.icon ?? "globe");
-
   return (
     <div className="relative w-full h-full flex flex-col justify-center p-7 bg-ink-950 text-fg rounded-2xl overflow-hidden">
       {/* Background ambient glow matching accent-3 (violet / time) */}
@@ -25,7 +23,7 @@ export const BridgeScene: React.FC<Props> = ({ data, isActive }) => {
         transition={{ duration: 0.4 }}
         className="z-10 inline-flex self-start items-center gap-2 mb-5 px-3 py-1 rounded-full bg-ink-900/80 border border-ink-800"
       >
-        <Icon className="w-3.5 h-3.5 text-accent-3" />
+        <SceneIcon name={data.icon ?? "globe"} className="w-3.5 h-3.5 text-accent-3" />
         <span className="text-[10px] font-bold uppercase tracking-widest text-accent-3">
           Chapter {data.chapterNumber}
         </span>

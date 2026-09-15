@@ -31,7 +31,11 @@ function toExplainer(c: AdminClip): ExplainerClip {
 }
 
 export default function AdminPage() {
-  const [adminKey, setAdminKey] = useState("");
+  const [adminKey, setAdminKey] = useState(() =>
+    typeof window === "undefined"
+      ? ""
+      : sessionStorage.getItem(KEY_STORAGE) ?? ""
+  );
   const [authed, setAuthed] = useState(false);
   const [title, setTitle] = useState("");
   const [source, setSource] = useState("");
@@ -43,11 +47,6 @@ export default function AdminPage() {
   const [preview, setPreview] = useState<AdminClip | null>(null);
   const [clips, setClips] = useState<AdminClip[]>([]);
   const [showJson, setShowJson] = useState(false);
-
-  useEffect(() => {
-    const saved = sessionStorage.getItem(KEY_STORAGE);
-    if (saved) setAdminKey(saved);
-  }, []);
 
   const refresh = useCallback(async (key: string) => {
     if (!key) {
@@ -65,6 +64,7 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refresh(adminKey);
   }, [adminKey, refresh]);
 

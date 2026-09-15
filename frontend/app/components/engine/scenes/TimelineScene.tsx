@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { TimelineSceneData } from "../../../types/schema";
-import { getIcon } from "../../../lib/iconRegistry";
+import { SceneIcon } from "../SceneIcon";
 
 interface Props {
   data: TimelineSceneData;
@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const TimelineScene: React.FC<Props> = ({ data, isActive }) => {
-  const Icon = getIcon(data.icon);
   const steps = data.steps.slice(0, 4); // hard cap — protects layout from bad AI output
 
   return (
@@ -24,7 +23,7 @@ export const TimelineScene: React.FC<Props> = ({ data, isActive }) => {
         transition={{ duration: 0.4 }}
         className="z-10 inline-flex self-start items-center gap-2 mb-7 px-3 py-1 rounded-full bg-ink-900/80 border border-ink-800"
       >
-        <Icon className="w-3.5 h-3.5 text-accent-3" />
+        <SceneIcon name={data.icon} className="w-3.5 h-3.5 text-accent-3" />
         <span className="text-[11px] font-semibold uppercase tracking-widest text-fg-muted">
           {data.topic}
         </span>

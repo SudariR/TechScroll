@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { CauseEffectSceneData } from "../../../types/schema";
-import { getIcon } from "../../../lib/iconRegistry";
+import { SceneIcon } from "../SceneIcon";
 import { ArrowDown } from "lucide-react";
 
 interface Props {
@@ -12,8 +12,6 @@ interface Props {
 }
 
 export const CauseEffectScene: React.FC<Props> = ({ data, isActive }) => {
-  const Icon = getIcon(data.icon);
-
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center p-7 bg-ink-950 text-fg rounded-2xl overflow-hidden">
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-72 h-72 bg-accent-soft rounded-full blur-3xl pointer-events-none" />
@@ -24,7 +22,7 @@ export const CauseEffectScene: React.FC<Props> = ({ data, isActive }) => {
         transition={{ duration: 0.4 }}
         className="z-10 inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-full bg-ink-900/80 border border-ink-800"
       >
-        <Icon className="w-3.5 h-3.5 text-accent" />
+        <SceneIcon name={data.icon} className="w-3.5 h-3.5 text-accent" />
         <span className="text-[11px] font-semibold uppercase tracking-widest text-fg-muted">
           {data.topic}
         </span>

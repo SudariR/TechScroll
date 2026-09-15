@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExplainerClip } from "../../types/schema";
+import { ExplainerClip, HeroSceneData } from "../../types/schema";
 import { SceneRenderer } from "./SceneRenderer";
 import { SceneProgress } from "./SceneProgress";
 import { ImpactBadge } from "./ImpactBadge";
@@ -47,7 +47,7 @@ export const ClipPlayer: React.FC<Props> = ({
 
   const category =
     clip.category ||
-    (clip.scenes.find((s) => s.template === "Hero") as any)?.tag;
+    (clip.scenes.find((s) => s.template === "Hero") as HeroSceneData | undefined)?.tag;
 
   const next = useCallback(
     () => setIndex((i) => Math.min(i + 1, total - 1)),
@@ -58,6 +58,7 @@ export const ClipPlayer: React.FC<Props> = ({
   /* reset when scrolled out of view */
   useEffect(() => {
     if (!isActive) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIndex(0);
       setIsPlaying(true);
     }

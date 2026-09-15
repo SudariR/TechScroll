@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { HeroSceneData } from "../../../types/schema";
-import { getIcon } from "../../../lib/iconRegistry";
+import { SceneIcon } from "../SceneIcon";
 
 interface Props {
   data: HeroSceneData;
@@ -10,7 +10,6 @@ interface Props {
 }
 
 export const HeroScene: React.FC<Props> = ({ data, isActive }) => {
-  const Icon = getIcon(data.icon);
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center text-center p-8 bg-ink-950 text-fg rounded-2xl overflow-hidden">
       {/* 1. AMBIENT BACKGROUND GLOW (Subtle blue light blob in background) */}
@@ -42,7 +41,7 @@ export const HeroScene: React.FC<Props> = ({ data, isActive }) => {
           transition={{ duration: 0.4, delay: 0.1 }}
           className="inline-flex items-center gap-1.5 px-3 py-1 mb-5 text-xs font-semibold tracking-wider uppercase bg-accent-soft text-accent rounded-full border border-accent-border"
         >
-          <Icon className="w-3 h-3 text-accent" />
+          <SceneIcon name={data.icon} className="w-3 h-3 text-accent" />
           <span>{data.tag}</span>
         </motion.div>
       )}
