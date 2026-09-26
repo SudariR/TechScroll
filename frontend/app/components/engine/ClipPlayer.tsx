@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExplainerClip } from "../../types/schema";
+import { ExplainerClip, HeroSceneData } from "../../types/schema";
 import { SceneRenderer } from "./SceneRenderer";
 import { SceneProgress } from "./SceneProgress";
+import { ImpactBadge } from "./ImpactBadge";
 import {
   ChevronLeft,
   ChevronRight,
@@ -22,6 +24,7 @@ const TEMPLATE_GLOW_COLORS: Record<string, string> = {
   CauseEffect: "rgba(0, 168, 0, 0.35)",
   Statistic: "rgba(77, 216, 255, 0.35)",
   Timeline: "rgba(180, 139, 255, 0.35)",
+  Bridge: "rgba(180, 139, 255, 0.35)",
 };
 
 interface Props {
@@ -44,7 +47,7 @@ export const ClipPlayer: React.FC<Props> = ({
 
   const category =
     clip.category ||
-    (clip.scenes.find((s) => s.template === "Hero") as any)?.tag;
+    (clip.scenes.find((s) => s.template === "Hero") as HeroSceneData | undefined)?.tag;
 
   const next = useCallback(
     () => setIndex((i) => Math.min(i + 1, total - 1)),
@@ -55,6 +58,7 @@ export const ClipPlayer: React.FC<Props> = ({
   /* reset when scrolled out of view */
   useEffect(() => {
     if (!isActive) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIndex(0);
       setIsPlaying(true);
     }
@@ -101,6 +105,22 @@ export const ClipPlayer: React.FC<Props> = ({
   return (
     <div className="w-full max-w-md flex flex-col gap-4">
       <div className="flex flex-col gap-2">
+        {clip.storyKey && clip.chapterNumber != null && clip.chapterNumber > 1 && (
+          <div className="self-start">
+            <Link
+              href={`/threads/${clip.storyKey}`}
+              className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-accent-3 bg-accent-3-soft border border-accent-3/25 rounded-full px-2.5 py-1 hover:-translate-x-0.5 hover:text-white hover:border-accent-3/50 hover:bg-accent-3/25 transition-all duration-200"
+            >
+              <span>⟵ CHAPTER {clip.chapterNumber}</span>
+              {clip.storyLabel && (
+                <>
+                  <span className="text-accent-3/40">·</span>
+                  <span className="font-semibold truncate max-w-[200px]">{clip.storyLabel}</span>
+                </>
+              )}
+            </Link>
+          </div>
+        )}
         <SceneProgress
           total={total}
           currentIndex={index}
@@ -116,6 +136,14 @@ export const ClipPlayer: React.FC<Props> = ({
               <span className="shrink-0 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-ink-900 border border-ink-800 text-fg-muted">
                 {category}
               </span>
+            )}
+            {clip.impactScore != null && (
+              <ImpactBadge
+                score={clip.impactScore}
+                scope={clip.impactScope}
+                horizon={clip.impactHorizon}
+                reasoning={clip.impactReasoning}
+              />
             )}
           </div>
           <span className="tabular-nums shrink-0 font-medium">

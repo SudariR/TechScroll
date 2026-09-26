@@ -53,71 +53,71 @@ transitive dependencies, most of which developers never explicitly选择. Trust
 in the supply chain, rather than code quality, is increasingly the weak point.
     `.trim(),
   },
-//   {
-//     slug: 'database-relicense',
-//     title: 'Infrastructure Project Moves From Apache 2.0 to Business Source License',
-//     expectedCategory: 'OPEN_SOURCE',
-//     content: `
-// The maintainers of a widely deployed data streaming platform announced a
-// licence change for its next major version, moving from Apache 2.0 to the
-// Business Source License with a four-year conversion window.
+  //   {
+  //     slug: 'database-relicense',
+  //     title: 'Infrastructure Project Moves From Apache 2.0 to Business Source License',
+  //     expectedCategory: 'OPEN_SOURCE',
+  //     content: `
+  // The maintainers of a widely deployed data streaming platform announced a
+  // licence change for its next major version, moving from Apache 2.0 to the
+  // Business Source License with a four-year conversion window.
 
-// The company behind the project cited managed-service competition as the
-// reason. Three major cloud providers currently offer hosted versions of the
-// software, and the company estimates those services generate several times the
-// revenue of its own commercial offering.
+  // The company behind the project cited managed-service competition as the
+  // reason. Three major cloud providers currently offer hosted versions of the
+  // software, and the company estimates those services generate several times the
+  // revenue of its own commercial offering.
 
-// Under the new licence the source remains readable and usable in production,
-// but offering it as a competing managed service is prohibited until the
-// conversion date, at which point each release reverts to Apache 2.0.
+  // Under the new licence the source remains readable and usable in production,
+  // but offering it as a competing managed service is prohibited until the
+  // conversion date, at which point each release reverts to Apache 2.0.
 
-// Within 48 hours, a group of contributors announced a fork of the final
-// Apache-licensed commit. Two Linux distributions have said they will package
-// the fork rather than the relicensed version.
-//     `.trim(),
-//   },
-//   {
-//     slug: 'runtime-release',
-//     title: 'JavaScript Runtime Ships Native TypeScript Execution',
-//     expectedCategory: 'PROGRAMMING',
-//     content: `
-// The latest release of a major JavaScript runtime adds the ability to execute
-// TypeScript files directly, stripping type annotations at load time without a
-// separate build step.
+  // Within 48 hours, a group of contributors announced a fork of the final
+  // Apache-licensed commit. Two Linux distributions have said they will package
+  // the fork rather than the relicensed version.
+  //     `.trim(),
+  //   },
+  //   {
+  //     slug: 'runtime-release',
+  //     title: 'JavaScript Runtime Ships Native TypeScript Execution',
+  //     expectedCategory: 'PROGRAMMING',
+  //     content: `
+  // The latest release of a major JavaScript runtime adds the ability to execute
+  // TypeScript files directly, stripping type annotations at load time without a
+  // separate build step.
 
-// The implementation performs type erasure only — it does not type-check. Files
-// using TypeScript features that require code generation, such as enums and
-// parameter properties, are rejected unless a flag is passed.
+  // The implementation performs type erasure only — it does not type-check. Files
+  // using TypeScript features that require code generation, such as enums and
+  // parameter properties, are rejected unless a flag is passed.
 
-// Benchmarks published alongside the release show cold-start times for a small
-// API server dropping from 840ms with a bundler-based workflow to 310ms with
-// native execution.
+  // Benchmarks published alongside the release show cold-start times for a small
+  // API server dropping from 840ms with a bundler-based workflow to 310ms with
+  // native execution.
 
-// The runtime team says the feature is intended for development and scripting
-// rather than production builds, where bundling still provides tree-shaking and
-// minification.
-//     `.trim(),
-//   },
-//   {
-//     slug: 'inference-funding',
-//     title: 'Inference Infrastructure Startup Raises Series B at 2.4 Billion Valuation',
-//     expectedCategory: 'STARTUPS',
-//     content: `
-// A startup building inference-optimised serving infrastructure has raised 240
-// million dollars in a Series B round, valuing the company at 2.4 billion
-// dollars roughly fourteen months after its Series A.
+  // The runtime team says the feature is intended for development and scripting
+  // rather than production builds, where bundling still provides tree-shaking and
+  // minification.
+  //     `.trim(),
+  //   },
+  //   {
+  //     slug: 'inference-funding',
+  //     title: 'Inference Infrastructure Startup Raises Series B at 2.4 Billion Valuation',
+  //     expectedCategory: 'STARTUPS',
+  //     content: `
+  // A startup building inference-optimised serving infrastructure has raised 240
+  // million dollars in a Series B round, valuing the company at 2.4 billion
+  // dollars roughly fourteen months after its Series A.
 
-// The company's product routes model requests across heterogeneous hardware,
-// selecting the cheapest accelerator that meets a latency target. It claims
-// customers reduce inference spend by 38 percent on average.
+  // The company's product routes model requests across heterogeneous hardware,
+  // selecting the cheapest accelerator that meets a latency target. It claims
+  // customers reduce inference spend by 38 percent on average.
 
-// Revenue reportedly grew from 4 million dollars to 61 million dollars in
-// annualised terms over the last year, driven largely by companies moving from
-// prototype to production deployments.
+  // Revenue reportedly grew from 4 million dollars to 61 million dollars in
+  // annualised terms over the last year, driven largely by companies moving from
+  // prototype to production deployments.
 
-// Investors described inference, rather than training, as the segment where
-// long-term compute spending will concentrate, noting that a model is trained
-// once but served continuously.
-//     `.trim(),
-//   },
+  // Investors described inference, rather than training, as the segment where
+  // long-term compute spending will concentrate, noting that a model is trained
+  // once but served continuously.
+  //     `.trim(),
+  //   },
 ];

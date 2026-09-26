@@ -101,26 +101,38 @@ function report(records: RunRecord[]) {
   console.log(`PROMPT EVAL — ${PROMPT_VERSION}`);
   console.log('='.repeat(58));
   console.log(`runs                 ${total}`);
-  console.log(`valid on attempt 1   ${firstTry.length}/${total}  ${pct(firstTry.length)}`);
-  console.log(`valid after repair   ${repaired.length}/${total}  ${pct(repaired.length)}`);
+  console.log(
+    `valid on attempt 1   ${firstTry.length}/${total}  ${pct(firstTry.length)}`,
+  );
+  console.log(
+    `valid after repair   ${repaired.length}/${total}  ${pct(repaired.length)}`,
+  );
   console.log(`unrecoverable        ${total - passed.length}/${total}`);
-  console.log(`category accuracy    ${passed.filter(r => r.categoryMatch).length}/${passed.length}`);
+  console.log(
+    `category accuracy    ${passed.filter((r) => r.categoryMatch).length}/${passed.length}`,
+  );
   console.log(`avg latency          ${avg(records.map((r) => r.latencyMs))}ms`);
 
   //   const validationCounts = tally(records.flatMap((r) => r.validationIssues.map((i) => i.split(':')[0])));
-  //  
+  //
   const validationCounts = tally(
-    records.flatMap((r) => r.validationIssues.map((i) => i.slice(0, 120)))
+    records.flatMap((r) => r.validationIssues.map((i) => i.slice(0, 120))),
   );
   if (validationCounts.length) {
     console.log(`\n-- validation failures by field --`);
-    validationCounts.forEach(([k, n]) => console.log(`  ${n.toString().padStart(3)}  ${k}`));
+    validationCounts.forEach(([k, n]) =>
+      console.log(`  ${n.toString().padStart(3)}  ${k}`),
+    );
   }
 
-  const qualityCounts = tally(records.flatMap((r) => r.qualityWarnings.map((w) => w.code)));
+  const qualityCounts = tally(
+    records.flatMap((r) => r.qualityWarnings.map((w) => w.code)),
+  );
   if (qualityCounts.length) {
     console.log(`\n-- quality warnings by type --`);
-    qualityCounts.forEach(([k, n]) => console.log(`  ${n.toString().padStart(3)}  ${k}`));
+    qualityCounts.forEach(([k, n]) =>
+      console.log(`  ${n.toString().padStart(3)}  ${k}`),
+    );
   }
 
   const worst = [...records].sort(
@@ -128,12 +140,22 @@ function report(records: RunRecord[]) {
   )[0];
   if (worst?.qualityWarnings.length) {
     console.log(`\n-- worst run: ${worst.slug} (run ${worst.run}) --`);
-    worst.qualityWarnings.forEach((w) => console.log(`  ${w.code}: ${w.detail}`));
+    worst.qualityWarnings.forEach((w) =>
+      console.log(`  ${w.code}: ${w.detail}`),
+    );
   }
 
   writeFileSync(
     `eval-report-${PROMPT_VERSION}.json`,
-    JSON.stringify({ promptVersion: PROMPT_VERSION, generatedAt: new Date().toISOString(), records }, null, 2),
+    JSON.stringify(
+      {
+        promptVersion: PROMPT_VERSION,
+        generatedAt: new Date().toISOString(),
+        records,
+      },
+      null,
+      2,
+    ),
   );
   console.log(`\nreport written to eval-report-${PROMPT_VERSION}.json\n`);
 }

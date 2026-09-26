@@ -1,5 +1,13 @@
 import {
-  Body, Controller, Delete, Get, Param, Post, Query, Headers, UnauthorizedException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  Headers,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ClipsService } from './clips.service';
 
@@ -13,13 +21,27 @@ export class ClipsController {
 
   @Get()
   list(@Query('range') range?: string) {
-    const validRange = range === 'today' || range === 'week' || range === 'all' ? range : 'today';
+    const validRange =
+      range === 'today' || range === 'week' || range === 'all'
+        ? range
+        : 'today';
     return this.clips.findPublished(validRange);
   }
 
   @Get('counts')
   counts() {
     return this.clips.countsByRange();
+  }
+
+  @Get('threads')
+  threads(@Query('limit') limit?: string) {
+    const parsedLimit = limit ? parseInt(limit, 10) : 12;
+    return this.clips.findThreads(Number.isNaN(parsedLimit) ? 12 : parsedLimit);
+  }
+
+  @Get('threads/:storyKey')
+  thread(@Param('storyKey') storyKey: string) {
+    return this.clips.findThread(storyKey);
   }
 
   @Get('all')
@@ -30,7 +52,13 @@ export class ClipsController {
 
   @Post('generate')
   generate(
-    @Body() body: { title: string; source: string; content: string; sourceUrl?: string },
+    @Body()
+    body: {
+      title: string;
+      source: string;
+      content: string;
+      sourceUrl?: string;
+    },
     @Headers('x-admin-key') key?: string,
   ) {
     this.assertAdmin(key);

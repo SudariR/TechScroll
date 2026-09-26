@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ComparisonSceneData } from "../../../types/schema";
 import { getBrandLogo } from "../../../lib/brandLogo";
-import { getIcon } from "../../../lib/iconRegistry";
+import { SceneIcon } from "../SceneIcon";
 
 interface Props {
   data: ComparisonSceneData;
@@ -77,7 +77,6 @@ const CompareCard: React.FC<CardProps> = ({
 
 export const ComparisonScene: React.FC<Props> = ({ data, isActive }) => {
   const emphasis = data.emphasis ?? "right";
-  const Icon = getIcon(data.icon);
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center p-6 bg-ink-950 text-fg rounded-2xl overflow-hidden">
@@ -90,7 +89,7 @@ export const ComparisonScene: React.FC<Props> = ({ data, isActive }) => {
         transition={{ duration: 0.4 }}
         className="z-10 inline-flex items-center gap-2 mb-7 px-3 py-1 rounded-full bg-ink-900/80 border border-ink-800"
       >
-        <Icon className="w-3.5 h-3.5 text-accent" />
+        <SceneIcon name={data.icon} className="w-3.5 h-3.5 text-accent" />
         <span className="text-[11px] font-semibold uppercase tracking-widest text-fg-muted">
           {data.topic}
         </span>

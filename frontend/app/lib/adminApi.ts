@@ -15,6 +15,10 @@ export interface AdminClip {
   featured: boolean;
   model: string | null;
   promptVersion: string | null;
+  impactScore?: number;
+  impactScope?: string;
+  impactHorizon?: string;
+  impactReasoning?: string;
   createdAt: string;
 }
 

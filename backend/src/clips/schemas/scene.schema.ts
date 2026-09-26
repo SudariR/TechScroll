@@ -5,8 +5,18 @@ import { z } from 'zod';
 /* ------------------------------------------------------------------ */
 
 export const ICON_NAMES = [
-  'cpu', 'shield', 'zap', 'trending-up', 'database', 'cloud',
-  'lock', 'bug', 'rocket', 'globe', 'code', 'brain',
+  'cpu',
+  'shield',
+  'zap',
+  'trending-up',
+  'database',
+  'cloud',
+  'lock',
+  'bug',
+  'rocket',
+  'globe',
+  'code',
+  'brain',
 ] as const;
 
 const iconSchema = z.enum(ICON_NAMES).optional();
@@ -20,7 +30,10 @@ const baseFields = {
 /* domains like "nvidia.com" — never full URLs */
 const domainSchema = z
   .string()
-  .regex(/^[a-z0-9-]+(\.[a-z0-9-]+)+$/i, 'must be a bare domain, e.g. nvidia.com')
+  .regex(
+    /^[a-z0-9-]+(\.[a-z0-9-]+)+$/i,
+    'must be a bare domain, e.g. nvidia.com',
+  )
   .optional();
 
 /* ------------------------------------------------------------------ */
@@ -79,6 +92,15 @@ export const causeEffectSceneSchema = z.object({
   effectLabel: z.string().max(28).optional(),
 });
 
+export const bridgeSceneSchema = z.object({
+  ...baseFields,
+  template: z.literal('Bridge'),
+  storyLabel: z.string().min(4).max(40),
+  previously: z.string().min(20).max(180), // what the reader last knew
+  nowWhat: z.string().min(20).max(180), // what has changed
+  chapterNumber: z.number().int().min(2).max(99),
+});
+
 /* ------------------------------------------------------------------ */
 /* The union                                                           */
 /* ------------------------------------------------------------------ */
@@ -89,6 +111,7 @@ export const sceneSchema = z.discriminatedUnion('template', [
   statisticSceneSchema,
   timelineSceneSchema,
   causeEffectSceneSchema,
+  bridgeSceneSchema,
 ]);
 
 export type Scene = z.infer<typeof sceneSchema>;

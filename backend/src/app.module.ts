@@ -16,4 +16,4 @@ import { IngestModule } from './ingest/ingest.module';
     IngestModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}
